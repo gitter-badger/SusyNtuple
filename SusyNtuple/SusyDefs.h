@@ -127,6 +127,7 @@ enum AnalysisType
   Ana_2Lep = 0,
   Ana_3Lep,
   Ana_2LepWH,
+  Ana_2LMONOJET,
   Ana_N
 };
 
@@ -135,6 +136,7 @@ const std::string SusyNtAnalysisType[Ana_N] = {
   "Ana_2Lep",
   "Ana_3Lep",
   "Ana_2LepWH",
+  "Ana_2LMONOJET",
 };
 
 /// SUSY D3PD tag, for controlling which branch names to grab

@@ -102,7 +102,8 @@ Bool_t SusyNtAna::Process(Long64_t entry)
 /*--------------------------------------------------------------------------------*/
 void SusyNtAna::Terminate()
 {
-  if(m_dbg) cout << "SusyNtAna::Terminate" << endl;
+  //if(m_dbg) 
+    cout << "SusyNtAna::Terminate" << endl;
 
   // Stop the timer
   m_timer.Stop();
@@ -224,45 +225,6 @@ void SusyNtAna::selectObjects(SusyNtSys sys, bool removeLepsFromIso,
   getBaselineObjects(&nt, m_preElectrons, m_preMuons, m_preJets, 
                      m_baseElectrons, m_baseMuons, m_baseTaus, m_baseJets, 
                      sys, m_selectTaus, n0150BugFix);
-
-  // Now grab Signal objects
-  // New signal tau prescription, fill both ID levels at once
-  getSignalObjects(m_baseElectrons, m_baseMuons, m_baseTaus, m_baseJets,
-                   m_signalElectrons, m_signalMuons, 
-                   m_mediumTaus, m_tightTaus, 
-                   m_signalJets, m_signalJets2Lep, 
-                   nt.evt()->nVtx, nt.evt()->isMC, 
-                   removeLepsFromIso, sys);
-  m_signalTaus = signalTauID==TauID_tight? m_tightTaus : m_mediumTaus;
-
-  // Grab met
-  SusyNtSys metSys = sys;
-  if(sys==NtSys_JVF_UP || sys==NtSys_JVF_DN) metSys = NtSys_NOM;
-  m_met = getMet(&nt, metSys);
-
-  // Build Lepton vectors
-  buildLeptons(m_baseLeptons, m_baseElectrons, m_baseMuons);
-  buildLeptons(m_signalLeptons, m_signalElectrons, m_signalMuons);
-
-  // sort leptons by pt
-  std::sort(m_baseLeptons.begin(), m_baseLeptons.end(), comparePt);
-  std::sort(m_signalLeptons.begin(), m_signalLeptons.end(), comparePt);
-  std::sort(m_signalJets.begin(), m_signalJets.end(), comparePt);
-  std::sort(m_signalJets2Lep.begin(), m_signalJets2Lep.end(), comparePt);
-}
-/*--------------------------------------------------------------------------------*/
-// Select baseline and signal leptons for monojet
-/*--------------------------------------------------------------------------------*/
-void SusyNtAna::selectObjectsMonojet(SusyNtSys sys, bool removeLepsFromIso, 
-				     TauID signalTauID, bool n0150BugFix)
-{
-  // Empty the object vectors
-  clearObjects();
-
-  // Get the Baseline objets
-  getBaselineObjectsMonojet(&nt, m_preElectrons, m_preMuons, m_preJets, 
-			    m_baseElectrons, m_baseMuons, m_baseTaus, m_baseJets, 
-			    sys, m_selectTaus, n0150BugFix);
 
   // Now grab Signal objects
   // New signal tau prescription, fill both ID levels at once

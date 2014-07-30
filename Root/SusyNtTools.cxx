@@ -195,33 +195,10 @@ void SusyNtTools::getBaselineObjects(SusyNtObject* susyNt,
   performOverlap(elecs, muons, taus, jets);
 
   // Remove MSFOS < 12 GeV
-  removeSFOSPair(elecs, MLL_MIN);
-  removeSFOSPair(muons, MLL_MIN);
-}
-/*--------------------------------------------------------------------------------*/
-void SusyNtTools::getBaselineObjectsMonojet(SusyNtObject* susyNt, 
-					    ElectronVector& preElecs, MuonVector& preMuons, JetVector& preJets,
-					    ElectronVector& elecs, MuonVector& muons, TauVector& taus, JetVector& jets, 
-					    SusyNtSys sys, bool selectTaus, bool n0150BugFix)
-{
-  // Preselection
-  preElecs = getPreElectronsMonojet(susyNt, sys);
-  preMuons = getPreMuonsMonojet(susyNt, sys, n0150BugFix);
-  preJets  = getPreJets(susyNt, sys);
-  if(selectTaus) taus = getPreTaus(susyNt, sys);
-  else taus.clear();
-
-  // Baseline objects
-  elecs = preElecs;
-  muons = preMuons;
-  jets  = preJets;
-
-  // Overlap removal
-  performOverlap(elecs, muons, taus, jets);
-
-  // Remove MSFOS < 12 GeV --- > NOT done for Monojet
-  //removeSFOSPair(elecs, MLL_MIN);
-  //removeSFOSPair(muons, MLL_MIN);
+  if(m_anaType!=Ana_2LMONOJET){
+    removeSFOSPair(elecs, MLL_MIN);
+    removeSFOSPair(muons, MLL_MIN);
+  }
 }
 /*--------------------------------------------------------------------------------*/
 void SusyNtTools::getBaselineObjects(SusyNtObject* susyNt, ElectronVector& elecs,
@@ -344,7 +321,8 @@ ElectronVector SusyNtTools::getPreElectrons(SusyNtObject* susyNt, SusyNtSys sys)
     e->setState(sys);
     
     // Apply any additional Selection
-    if(e->Pt() < ELECTRON_PT_CUT) continue;
+    if(m_anaType==Ana_2LMONOJET && e->Pt() < ELECTRON_PT_CUT_MONOJET) continue;
+    else if(e->Pt() < ELECTRON_PT_CUT) continue;
 
     // Save
     elecs.push_back(e);
@@ -361,7 +339,8 @@ MuonVector SusyNtTools::getPreMuons(SusyNtObject* susyNt, SusyNtSys sys, bool n0
     mu->setState(sys, n0150BugFix);
 
     // Apply any additional selection
-    if(mu->Pt() < MUON_PT_CUT) continue;
+    if(m_anaType==Ana_2LMONOJET && mu->Pt() < MUON_PT_CUT_MONOJET) continue;
+    else if(mu->Pt() < MUON_PT_CUT) continue;
     
     muons.push_back(mu);
   }
@@ -380,41 +359,6 @@ TauVector SusyNtTools::getPreTaus(SusyNtObject* susyNt, SusyNtSys sys)
     if(isSelectTau(tau)) taus.push_back(tau);
   }
   return taus;
-}
-/*--------------------------------------------------------------------------------*/
-ElectronVector SusyNtTools::getPreElectronsMonojet(SusyNtObject* susyNt, SusyNtSys sys)
-{
-  // Not sure if I want to pass SusyNt object around or not... but just do it this way
-  // for now for lack of a more creative idea.
-  ElectronVector elecs;
-  for(uint ie=0; ie<susyNt->ele()->size(); ++ie){
-    Electron* e = & susyNt->ele()->at(ie);
-    e->setState(sys);
-    
-    // Apply any additional Selection
-    if(e->Pt() < ELECTRON_PT_CUT_MONOJET) continue;
-
-    // Save
-    elecs.push_back(e);
-  }
-
-  return elecs;
-}
-/*--------------------------------------------------------------------------------*/
-MuonVector SusyNtTools::getPreMuonsMonojet(SusyNtObject* susyNt, SusyNtSys sys, bool n0150BugFix)
-{
-  MuonVector muons;
-  for(uint im=0; im<susyNt->muo()->size(); ++im){
-    Muon* mu = & susyNt->muo()->at(im);
-    mu->setState(sys, n0150BugFix);
-
-    // Apply any additional selection
-    if(mu->Pt() < MUON_PT_CUT_MONOJET) continue;
-    
-    muons.push_back(mu);
-  }
-
-  return muons;
 }
 /*--------------------------------------------------------------------------------*/
 JetVector SusyNtTools::getPreJets(SusyNtObject* susyNt, SusyNtSys sys)
@@ -861,7 +805,7 @@ bool SusyNtTools::isCentralLightJet(const Susy::Jet* jet, JVFUncertaintyTool* jv
     if(jet) {
         float minJvf = JET_JVF_CUT;
         float maxJvtEta = JET_JVF_ETA;
-        if(anaType == Ana_2Lep || anaType == Ana_2LepWH) {
+        if(anaType == Ana_2Lep || anaType == Ana_2LepWH || anaType == Ana_2LMONOJET) {
             minJvf = JET_JVF_CUT_2L;
             maxJvtEta = JET_ETA_CUT_2L;
         }
@@ -1763,10 +1707,10 @@ JetVector SusyNtTools::getBTagSFJets2Lep(const JetVector& baseJets)
 /*--------------------------------------------------------------------------------*/
 float SusyNtTools::bTagSF(const Event* evt, const JetVector& jets, int mcID, BTagSys sys)
 {
-  if(!evt->isMC) return 1;
+  if(!evt->isMC) return 1.0;
   
   if(!m_btagTool){
-    if(m_anaType == Ana_2Lep || m_anaType == Ana_2LepWH) 
+    if(m_anaType == Ana_2Lep || m_anaType == Ana_2LepWH || m_anaType == Ana_2LMONOJET) 
       configureBTagTool("0_3511", MV1_80, false);
     else
       configureBTagTool("0_3511", MV1_80, true);
@@ -2326,7 +2270,7 @@ bool SusyNtTools::jetPassesJvfRequirement(const Susy::Jet* jet, JVFUncertaintyTo
                 assert(jvfTool);
             }
         }
-        bool acceptMinusOne(anaType==Ana_2Lep);  // Ana_2Lep accepts jvf of -1 (corresponds to jet w/out tracks)
+        bool acceptMinusOne(anaType==Ana_2Lep || anaType==Ana_2LMONOJET);  // Ana_2Lep accepts jvf of -1 (corresponds to jet w/out tracks)
         bool jvfIsMinusOne(fabs(jet->jvf + 1.0) < 1e-3);
         if(applyJvf) {
             pass = (jet->jvf > jvfThres || (acceptMinusOne && jvfIsMinusOne));
