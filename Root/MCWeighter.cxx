@@ -118,6 +118,7 @@ void MCWeighter::buildSumwMapFromTree(TTree* tree)
       } // Is a proc cutflow
     } // Object is a histo
   } // Loop over TKeys in TFile
+  delete evt; // clean up memory
 }
 /*--------------------------------------------------------------------------------*/
 void MCWeighter::buildSumwMapFromChain(TChain* chain)

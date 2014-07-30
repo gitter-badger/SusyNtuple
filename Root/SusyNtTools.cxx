@@ -199,6 +199,31 @@ void SusyNtTools::getBaselineObjects(SusyNtObject* susyNt,
   removeSFOSPair(muons, MLL_MIN);
 }
 /*--------------------------------------------------------------------------------*/
+void SusyNtTools::getBaselineObjectsMonojet(SusyNtObject* susyNt, 
+					    ElectronVector& preElecs, MuonVector& preMuons, JetVector& preJets,
+					    ElectronVector& elecs, MuonVector& muons, TauVector& taus, JetVector& jets, 
+					    SusyNtSys sys, bool selectTaus, bool n0150BugFix)
+{
+  // Preselection
+  preElecs = getPreElectronsMonojet(susyNt, sys);
+  preMuons = getPreMuonsMonojet(susyNt, sys, n0150BugFix);
+  preJets  = getPreJets(susyNt, sys);
+  if(selectTaus) taus = getPreTaus(susyNt, sys);
+  else taus.clear();
+
+  // Baseline objects
+  elecs = preElecs;
+  muons = preMuons;
+  jets  = preJets;
+
+  // Overlap removal
+  performOverlap(elecs, muons, taus, jets);
+
+  // Remove MSFOS < 12 GeV --- > NOT done for Monojet
+  //removeSFOSPair(elecs, MLL_MIN);
+  //removeSFOSPair(muons, MLL_MIN);
+}
+/*--------------------------------------------------------------------------------*/
 void SusyNtTools::getBaselineObjects(SusyNtObject* susyNt, ElectronVector& elecs,
                                      MuonVector& muons, TauVector& taus, JetVector& jets, 
                                      SusyNtSys sys, bool selectTaus, bool n0150BugFix)
@@ -355,6 +380,41 @@ TauVector SusyNtTools::getPreTaus(SusyNtObject* susyNt, SusyNtSys sys)
     if(isSelectTau(tau)) taus.push_back(tau);
   }
   return taus;
+}
+/*--------------------------------------------------------------------------------*/
+ElectronVector SusyNtTools::getPreElectronsMonojet(SusyNtObject* susyNt, SusyNtSys sys)
+{
+  // Not sure if I want to pass SusyNt object around or not... but just do it this way
+  // for now for lack of a more creative idea.
+  ElectronVector elecs;
+  for(uint ie=0; ie<susyNt->ele()->size(); ++ie){
+    Electron* e = & susyNt->ele()->at(ie);
+    e->setState(sys);
+    
+    // Apply any additional Selection
+    if(e->Pt() < ELECTRON_PT_CUT_MONOJET) continue;
+
+    // Save
+    elecs.push_back(e);
+  }
+
+  return elecs;
+}
+/*--------------------------------------------------------------------------------*/
+MuonVector SusyNtTools::getPreMuonsMonojet(SusyNtObject* susyNt, SusyNtSys sys, bool n0150BugFix)
+{
+  MuonVector muons;
+  for(uint im=0; im<susyNt->muo()->size(); ++im){
+    Muon* mu = & susyNt->muo()->at(im);
+    mu->setState(sys, n0150BugFix);
+
+    // Apply any additional selection
+    if(mu->Pt() < MUON_PT_CUT_MONOJET) continue;
+    
+    muons.push_back(mu);
+  }
+
+  return muons;
 }
 /*--------------------------------------------------------------------------------*/
 JetVector SusyNtTools::getPreJets(SusyNtObject* susyNt, SusyNtSys sys)

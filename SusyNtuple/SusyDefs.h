@@ -400,10 +400,8 @@ enum TrigBit
   BIT_e24vh_medium1_EFxe35_tclcw,
   BIT_mu24_j65_a4tchad_EFxe40_tclcw,
   BIT_mu24_j65_a4tchad_EFxe40wMu_tclcw,
-
-  N_TRIG,
-  // Another MET trigger
-  BIT_xe80_tclcw
+  BIT_xe80_tclcw, // Another MET trigger
+  N_TRIG // no triggers below this variable
 };
 
 //
@@ -488,9 +486,11 @@ stringvector getTrigChains();
 // into 2L and 3L separately, but that leads to duplications
 
 // Pt
-const float ELECTRON_PT_CUT  = 10; // GeV
-const float MUON_PT_CUT      = 10; // GeV
-const float TAU_PT_CUT       = 20; // GeV
+const float ELECTRON_PT_CUT          = 10.; // GeV
+const float MUON_PT_CUT              = 10.; // GeV
+const float TAU_PT_CUT               = 20.; // GeV
+const float ELECTRON_PT_CUT_MONOJET  = 7.; // GeV
+const float MUON_PT_CUT_MONOJET      = 4.; // GeV
 
 const float MLL_MIN          = 12;
 

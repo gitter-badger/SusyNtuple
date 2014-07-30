@@ -67,6 +67,9 @@ class SusyNtTools
     /// Bugfix for muon systematics in n0150
     MuonVector     getPreMuons(Susy::SusyNtObject* susyNt, SusyNtSys sys, bool n0150BugFix=false);
     TauVector      getPreTaus(Susy::SusyNtObject* susyNt, SusyNtSys sys);
+    ElectronVector getPreElectronsMonojet(Susy::SusyNtObject* susyNt, SusyNtSys sys);
+    /// Bugfix for muon systematics in n0150
+    MuonVector     getPreMuonsMonojet(Susy::SusyNtObject* susyNt, SusyNtSys sys, bool n0150BugFix=false);
     JetVector      getPreJets(Susy::SusyNtObject* susyNt, SusyNtSys sys);
   
     /// Get Baseline objects. Pre + overlap removal.
@@ -75,6 +78,11 @@ class SusyNtTools
                             ElectronVector& preElecs, MuonVector& preMuons, JetVector& preJets,
                             ElectronVector& elecs, MuonVector& muons, TauVector& taus, JetVector& jets, 
                             SusyNtSys sys, bool selectTaus=false, bool n0150BugFix=false);
+    // same as the first, but for monojet, which uses lower lepton pT selection.
+    void getBaselineObjectsMonojet(Susy::SusyNtObject* susyNt, 
+				   ElectronVector& preElecs, MuonVector& preMuons, JetVector& preJets,
+				   ElectronVector& elecs, MuonVector& muons, TauVector& taus, JetVector& jets, 
+				   SusyNtSys sys, bool selectTaus=false, bool n0150BugFix=false);
     /// Second method only provides the baseline objects after OR.
     void getBaselineObjects(Susy::SusyNtObject* susyNt, ElectronVector& elecs, 
                             MuonVector& muons, TauVector& taus, JetVector& jets, 
