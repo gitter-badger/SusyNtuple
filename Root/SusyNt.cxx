@@ -120,6 +120,12 @@ Electron::Electron(const Electron &rhs):
   trackPt(rhs.trackPt),
   mediumPP(rhs.mediumPP),
   tightPP(rhs.tightPP),
+  looseRelaxedLH(rhs.looseRelaxedLH),
+  veryLooseLH(rhs.veryLooseLH),
+  looseLH(rhs.looseLH),
+  mediumLH(rhs.mediumLH),
+  tightLH(rhs.tightLH),
+  veryTightLH(rhs.veryTightLH),
   etcone30Corr(rhs.etcone30Corr),
   topoEtcone30Corr(rhs.topoEtcone30Corr),
   isChargeFlip(rhs.isChargeFlip),
@@ -148,6 +154,12 @@ Electron& Electron::operator=(const Electron &rhs)
     trackPt = rhs.trackPt;
     mediumPP = rhs.mediumPP;
     tightPP = rhs.tightPP;
+    looseRelaxedLH = rhs.looseRelaxedLH;
+    veryLooseLH = rhs.veryLooseLH;
+    looseLH = rhs.looseLH;
+    mediumLH = rhs.mediumLH;
+    tightLH = rhs.tightLH;
+    veryTightLH = rhs.veryTightLH;
     etcone30Corr = rhs.etcone30Corr;
     topoEtcone30Corr = rhs.topoEtcone30Corr;
     isChargeFlip = rhs.isChargeFlip;

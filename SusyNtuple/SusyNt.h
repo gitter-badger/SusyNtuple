@@ -266,6 +266,12 @@ namespace Susy
       // isEM quality flags
       bool mediumPP;            ///< isEM medium++
       bool tightPP;             ///< isEM tight++
+      bool looseRelaxedLH;
+      bool veryLooseLH;
+      bool looseLH;
+      bool mediumLH;
+      bool tightLH;
+      bool veryTightLH;
 
       // New isolation variables, put them here for now
       float etcone30Corr;       ///< Pt and ED corrected etcone iso
@@ -301,6 +307,7 @@ namespace Susy
       void clear(){
         clusE = clusEta = clusPhi = trackPt = 0;
         mediumPP = tightPP = false;
+	looseRelaxedLH = veryLooseLH = looseLH = mediumLH = tightLH = veryTightLH = false;
         etcone30Corr = topoEtcone30Corr = 0;
         isChargeFlip = false;
 	//ees_up = ees_dn = eer_up = eer_dn = 0;

@@ -401,7 +401,9 @@ enum TrigBit
   BIT_mu24_j65_a4tchad_EFxe40_tclcw,
   BIT_mu24_j65_a4tchad_EFxe40wMu_tclcw,
 
-  N_TRIG
+  N_TRIG,
+  // Another MET trigger
+  BIT_xe80_tclcw
 };
 
 //
@@ -459,6 +461,7 @@ const long long TRIG_mu18_tight_2mu4_EFFS               = 1LL<<BIT_mu18_tight_2m
 const long long TRIG_2e7T_medium1_mu6                   = 1LL<<BIT_2e7T_medium1_mu6;
 const long long TRIG_e7T_medium1_2mu6                   = 1LL<<BIT_e7T_medium1_2mu6;
 const long long TRIG_xe80_tclcw_loose                   = 1LL<<BIT_xe80_tclcw_loose;
+const long long TRIG_xe80_tclcw                         = 1LL<<BIT_xe80_tclcw;
 const long long TRIG_j110_a4tchad_xe90_tclcw_loose      = 1LL<<BIT_j110_a4tchad_xe90_tclcw_loose;
 const long long TRIG_j80_a4tchad_xe100_tclcw_loose      = 1LL<<BIT_j80_a4tchad_xe100_tclcw_loose;
 const long long TRIG_j80_a4tchad_xe70_tclcw_dphi2j45xe10= 1LL<<BIT_j80_a4tchad_xe70_tclcw_dphi2j45xe10;
