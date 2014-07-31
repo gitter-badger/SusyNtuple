@@ -321,8 +321,8 @@ ElectronVector SusyNtTools::getPreElectrons(SusyNtObject* susyNt, SusyNtSys sys)
     e->setState(sys);
     
     // Apply any additional Selection
-    if(m_anaType==Ana_2LMONOJET && e->Pt() < ELECTRON_PT_CUT_MONOJET) continue;
-    else if(e->Pt() < ELECTRON_PT_CUT) continue;
+    if(m_anaType==Ana_2LMONOJET){ if(e->Pt() < ELECTRON_PT_CUT_MONOJET) continue; }
+    else{                         if(e->Pt() < ELECTRON_PT_CUT)         continue; }
 
     // Save
     elecs.push_back(e);
@@ -339,8 +339,8 @@ MuonVector SusyNtTools::getPreMuons(SusyNtObject* susyNt, SusyNtSys sys, bool n0
     mu->setState(sys, n0150BugFix);
 
     // Apply any additional selection
-    if(m_anaType==Ana_2LMONOJET && mu->Pt() < MUON_PT_CUT_MONOJET) continue;
-    else if(mu->Pt() < MUON_PT_CUT) continue;
+    if(m_anaType==Ana_2LMONOJET) { if(mu->Pt() < MUON_PT_CUT_MONOJET) continue; }
+    else{                          if(mu->Pt() < MUON_PT_CUT)         continue; }
     
     muons.push_back(mu);
   }
