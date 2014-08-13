@@ -320,6 +320,9 @@ ElectronVector SusyNtTools::getPreElectrons(SusyNtObject* susyNt, SusyNtSys sys)
     Electron* e = & susyNt->ele()->at(ie);
     e->setState(sys);
     
+    // Medium++
+    if(!(e->mediumPP)) continue;
+    
     // Apply any additional Selection
     if(m_anaType==Ana_2LMONOJET){ if(e->Pt() < ELECTRON_PT_CUT_MONOJET) continue; }
     else{                         if(e->Pt() < ELECTRON_PT_CUT)         continue; }
@@ -383,7 +386,7 @@ JetVector SusyNtTools::getPreJets(SusyNtObject* susyNt, SusyNtSys sys)
 ElectronVector SusyNtTools::getSignalElectrons(const ElectronVector& baseElecs, const MuonVector& baseMuons, 
                                                uint nVtx, bool isMC, bool removeLepsFromIso)
 {
-  ElectronVector sigElecs;
+  ElectronVector sigElecs; sigElecs.clear();
   for(uint ie=0; ie<baseElecs.size(); ++ie){
     Electron* e = baseElecs.at(ie);
     if(isSignalElectron(e, baseElecs, baseMuons, nVtx, isMC, removeLepsFromIso)){
@@ -397,7 +400,7 @@ ElectronVector SusyNtTools::getSignalElectrons(const ElectronVector& baseElecs, 
 MuonVector SusyNtTools::getSignalMuons(const MuonVector& baseMuons, const ElectronVector& baseElecs, 
                                        uint nVtx, bool isMC, bool removeLepsFromIso)
 {
-  MuonVector sigMuons;
+  MuonVector sigMuons; sigMuons.clear();
   for(uint im=0; im<baseMuons.size(); ++im){
     Muon* mu = baseMuons.at(im);
     if(isSignalMuon(mu, baseElecs, baseMuons, nVtx, isMC, removeLepsFromIso)){
@@ -1328,6 +1331,23 @@ bool SusyNtTools::passDeadRegions(const JetVector& preJets, const Met* met, int 
     if( !(jet->bch_corr_jet > 0.05) ) continue;
   
     if( fabs(jet->DeltaPhi( met->lv() )) < 0.3 ) return false;
+  }
+
+  return true;
+}
+
+/*--------------------------------------------------------------------------------*/
+// Pass Dead Region based on met, jets and run number
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::passBCHCleaningTight(const JetVector& preJets)
+{
+  // Info taken from here:
+  // https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/BCHCleaningTool#Cuts_based_on_BCH_CORR_CELL_IsBa
+  
+  for(uint ij = 0; ij<preJets.size(); ++ij){
+    const Jet* jet = preJets.at(ij);
+    cout << "jet pT: " << jet->Pt() << " bch: " << jet->isBadTightBCH << endl;
+    if(jet->isBadTightBCH) return false;
   }
 
   return true;
