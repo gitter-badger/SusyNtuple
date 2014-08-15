@@ -37,23 +37,23 @@ namespace Susy
       /// Event variables
       D3PDReader::VarHandle< Event* >                   evt;
       /// Electron variables
-      D3PDReader::VarHandle< std::vector<Electron>* >   ele;
+      D3PDReader::VarHandle< std::vector<Susy::Electron>* >   ele;
       /// Muon variables
-      D3PDReader::VarHandle< std::vector<Muon>* >       muo;
+      D3PDReader::VarHandle< std::vector<Susy::Muon>* >       muo;
       /// Jet variables
-      D3PDReader::VarHandle< std::vector<Jet>* >        jet;
+      D3PDReader::VarHandle< std::vector<Susy::Jet>* >        jet;
       /// Photon variables
-      D3PDReader::VarHandle< std::vector<Photon>* >     pho;
+      D3PDReader::VarHandle< std::vector<Susy::Photon>* >     pho;
       /// Tau variables
-      D3PDReader::VarHandle< std::vector<Tau>* >        tau;
+      D3PDReader::VarHandle< std::vector<Susy::Tau>* >        tau;
       /// Met variables
-      D3PDReader::VarHandle< std::vector<Met>* >        met;  
+      D3PDReader::VarHandle< std::vector<Susy::Met>* >        met;  
       /// TruthParticle variables
-      D3PDReader::VarHandle< std::vector<TruthParticle>* > tpr;
+      D3PDReader::VarHandle< std::vector<Susy::TruthParticle>* > tpr;
       /// TruthJet variables
-      D3PDReader::VarHandle< std::vector<TruthJet>* >   tjt;
+      D3PDReader::VarHandle< std::vector<Susy::TruthJet>* >   tjt;
       /// TruthMet variables
-      D3PDReader::VarHandle< std::vector<TruthMet>* >   tmt;
+      D3PDReader::VarHandle< std::vector<Susy::TruthMet>* >   tmt;
 
       ClassDef(SusyNtObject, 3);
 
