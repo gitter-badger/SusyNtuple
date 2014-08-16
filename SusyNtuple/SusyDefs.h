@@ -293,7 +293,7 @@ enum EventCleaningCuts
   ECut_Cosmic    = 1 << 8,
   ECut_SmartVeto = 1 << 9,
   ECut_TileTrip  = 1 << 10,
-  ECut_TightBCH  = 1 << 11
+  ECut_ValidMu   = 1 << 11
 };
 
 /// Way to check Event Types

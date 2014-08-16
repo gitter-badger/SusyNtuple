@@ -257,6 +257,9 @@ class SusyNtTools
     /// pass tile trip cut
     bool passTileTripCut(int flag) { return (flag & ECut_TileTrip); }
 
+    /// pass valid run cut
+    bool passValidMuCut(int flag)  { return (flag & ECut_ValidMu); }
+
     /// look at the MC truth record and determine whether SUSY propagators were involved
     static bool eventHasSusyPropagators(const std::vector< int > &pdgs,
                                         const std::vector< std::vector< int > > &parentIndices);
