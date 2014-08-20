@@ -575,7 +575,15 @@ bool SusyNtTools::isSignalElectron(const Electron* ele,
                                    const ElectronVector& baseElectrons, const MuonVector& baseMuons, 
                                    uint nVtx, bool isMC, bool removeLepsFromIso)
 {
-  if(!ele->tightPP) return false;
+  bool el_debug=false;
+  if(el_debug) cout << "ele pt: " << ele->Pt()
+       << " tight: " << ele->tightPP
+       << " d0Sig: " << fabs(ele->d0Sig(true))
+       << " Z0sin: " << fabs(ele->z0SinTheta(true))
+       << endl;
+
+  if(m_anaType == Ana_2LMONOJET){ if(!ele->mediumPP) return false; }
+  else{ if(!ele->tightPP) return false; }
 
   // Impact parameter
   if(m_doIPCut){
@@ -592,6 +600,7 @@ bool SusyNtTools::isSignalElectron(const Electron* ele,
   // Relative ptcone iso
   if(m_doPtconeCut){ // true by default
     float ptcone30 = elPtConeCorr(ele, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
+    if(el_debug) cout << "      ptcone30: " << ptcone30/pt << endl;
     if(m_anaType == Ana_2LepWH){
       if(ptcone30/std::min(pt,ELECTRON_ISO_PT_THRS) >=  ELECTRON_PTCONE30_PT_WH_CUT) return false;
     }
@@ -602,12 +611,14 @@ bool SusyNtTools::isSignalElectron(const Electron* ele,
   // Topo etcone isolation cut
   if(m_doElEtconeCut){ // true by default
     float etcone = elEtTopoConeCorr(ele, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
-     if(m_anaType == Ana_2LepWH){
+    if(el_debug) cout << "      etcone/pt: " << etcone/pt << endl;
+    if(m_anaType == Ana_2LepWH){
        if(etcone/std::min(pt,ELECTRON_ISO_PT_THRS) >= ELECTRON_TOPOCONE30_PT_WH_CUT) return false;
      }
      else 
        if(etcone/pt >= ELECTRON_TOPOCONE30_PT_CUT) return false;
   }
+  if(el_debug) cout << "     accept electron " << endl;
 
   return true;
 }
@@ -617,6 +628,15 @@ bool SusyNtTools::isSignalMuon(const Muon* mu,
                                const ElectronVector& baseElectrons, const MuonVector& baseMuons, 
                                uint nVtx, bool isMC, bool removeLepsFromIso)
 {
+  bool mu_debug=false;
+  if(mu_debug) cout << "muon pt: " << mu->Pt()
+       << " d0Sig: " << fabs(mu->d0Sig(true))
+       << " Z0sin: " << fabs(mu->z0SinTheta(true))
+       << endl;
+
+  // eta cut for mono-jet. 
+  if(m_anaType == Ana_2LMONOJET){ if(fabs(mu->Eta()) >= MUON_ETA_CUT) return false; }
+
   // Impact parameter
   if(m_doIPCut){
     // All ana using unbiased IP
@@ -635,6 +655,7 @@ bool SusyNtTools::isSignalMuon(const Muon* mu,
     else{
       float ptcone30 = mu->ptcone30ElStyle; // no corrections at the moment
       float pt = mu->Pt();
+      if(mu_debug) cout << "      muon ptcone30: " << ptcone30/pt << endl;
       if(m_anaType == Ana_2LepWH){
 	if(ptcone30/std::min(pt,MUON_ISO_PT_THRS) >= MUON_PTCONE30ELSTYLE_PT_WH_CUT) return false;
       }
@@ -646,13 +667,14 @@ bool SusyNtTools::isSignalMuon(const Muon* mu,
   // etcone isolation cut - not applied by default, but here for studies
   if(m_doMuEtconeCut){ // FALSE by default
     float etcone30 = muEtConeCorr(mu, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
+    if(mu_debug) cout << "      muon etcone30: " << etcone30/mu->Pt() << endl;
     if(m_doMuEtconeCut && etcone30/mu->Pt() >= MUON_ETCONE30_PT_CUT) return false;
   } else if(m_anaType == Ana_2LepWH) {
     float etcone30 = muEtConeCorr(mu, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
     float pt = mu->Pt();
     if(pt==0.0 || (etcone30/std::min(pt,MUON_ISO_PT_THRS) >= MUON_ETCONE30_PT_WH_CUT)) return false;    
   }
-
+  if(mu_debug) cout << "     accept muon " << endl;
   return true;
 }
 /*--------------------------------------------------------------------------------*/
