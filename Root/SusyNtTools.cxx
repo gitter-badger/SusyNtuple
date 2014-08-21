@@ -1368,7 +1368,7 @@ bool SusyNtTools::passBCHCleaningTight(const JetVector& preJets)
   
   for(uint ij = 0; ij<preJets.size(); ++ij){
     const Jet* jet = preJets.at(ij);
-    cout << "jet pT: " << jet->Pt() << " bch: " << jet->isBadTightBCH << endl;
+    //cout << "jet pT: " << jet->Pt() << " bch: " << jet->isBadTightBCH << endl;
     if(jet->isBadTightBCH) return false;
   }
 
