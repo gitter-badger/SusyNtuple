@@ -495,7 +495,8 @@ const float TAU_PT_CUT               = 20.; // GeV
 const float ELECTRON_PT_CUT_MONOJET  = 7.; // GeV
 const float MUON_PT_CUT_MONOJET      = 5.; // GeV
 
-const float MLL_MIN          = 12;
+const float MLL_MIN          = 12.0;
+const float MLL_MIN_MONJET   = 2.0;
 
 // TODO: Do we have a common jet pt cut now?
 const float JET_PT_CUT           = 20; // GeV

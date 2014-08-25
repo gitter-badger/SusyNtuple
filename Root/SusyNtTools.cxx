@@ -198,6 +198,9 @@ void SusyNtTools::getBaselineObjects(SusyNtObject* susyNt,
   if(m_anaType!=Ana_2LMONOJET){
     removeSFOSPair(elecs, MLL_MIN);
     removeSFOSPair(muons, MLL_MIN);
+  } else{
+    removeSFOSPair(elecs, MLL_MIN_MONJET);
+    removeSFOSPair(muons, MLL_MIN_MONJET);
   }
 }
 /*--------------------------------------------------------------------------------*/
@@ -218,8 +221,13 @@ void SusyNtTools::getBaselineObjects(SusyNtObject* susyNt, ElectronVector& elecs
   performOverlap(elecs, muons, taus, jets);
 
   // Do SFOS removal for Mll < 12 
-  removeSFOSPair(elecs, MLL_MIN);
-  removeSFOSPair(muons, MLL_MIN);
+  if(m_anaType!=Ana_2LMONOJET){
+    removeSFOSPair(elecs, MLL_MIN);
+    removeSFOSPair(muons, MLL_MIN);
+  }else{
+    removeSFOSPair(elecs, MLL_MIN_MONJET);
+    removeSFOSPair(muons, MLL_MIN_MONJET);
+  }
   // TODO: revisit this??
   //removeSFOSPair(taus, MLL_MIN);
 }
@@ -1365,7 +1373,7 @@ bool SusyNtTools::passBCHCleaningTight(const JetVector& preJets)
 {
   // Info taken from here:
   // https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/BCHCleaningTool#Cuts_based_on_BCH_CORR_CELL_IsBa
-  
+  // uses analysis jets
   for(uint ij = 0; ij<preJets.size(); ++ij){
     const Jet* jet = preJets.at(ij);
     //cout << "jet pT: " << jet->Pt() << " bch: " << jet->isBadTightBCH << endl;
