@@ -195,12 +195,12 @@ void SusyNtTools::getBaselineObjects(SusyNtObject* susyNt,
   performOverlap(elecs, muons, taus, jets);
 
   // Remove MSFOS < 12 GeV
-  if(m_anaType!=Ana_2LMONOJET){
-    removeSFOSPair(elecs, MLL_MIN);
-    removeSFOSPair(muons, MLL_MIN);
-  } else{
+  if(m_anaType==Ana_2LMONOJET){
     removeSFOSPair(elecs, MLL_MIN_MONJET);
     removeSFOSPair(muons, MLL_MIN_MONJET);
+  } else{
+    removeSFOSPair(elecs, MLL_MIN);
+    removeSFOSPair(muons, MLL_MIN);
   }
 }
 /*--------------------------------------------------------------------------------*/
@@ -221,12 +221,12 @@ void SusyNtTools::getBaselineObjects(SusyNtObject* susyNt, ElectronVector& elecs
   performOverlap(elecs, muons, taus, jets);
 
   // Do SFOS removal for Mll < 12 
-  if(m_anaType!=Ana_2LMONOJET){
-    removeSFOSPair(elecs, MLL_MIN);
-    removeSFOSPair(muons, MLL_MIN);
-  }else{
+  if(m_anaType==Ana_2LMONOJET){
     removeSFOSPair(elecs, MLL_MIN_MONJET);
     removeSFOSPair(muons, MLL_MIN_MONJET);
+  }else{
+    removeSFOSPair(elecs, MLL_MIN);
+    removeSFOSPair(muons, MLL_MIN);
   }
   // TODO: revisit this??
   //removeSFOSPair(taus, MLL_MIN);
