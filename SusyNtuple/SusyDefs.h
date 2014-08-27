@@ -204,6 +204,12 @@ enum SusyNtSys
   NtSys_JVF_UP,      ///< Jet JVF cut + sigma
   NtSys_JVF_DN,      ///< Jet JVF cut - sigma
 
+  // Photon systematics
+  NtSys_PHES_UP, // Photon energy scale + sigma
+  NtSys_PHES_DN, // Photon energy scale - sigma
+  NtSys_PHER_UP, // Photon resolution + sigma
+  NtSys_PHER_DN, // Photon resolution - sigma
+
   NtSys_N
 };
 
@@ -237,7 +243,11 @@ const std::string SusyNtSystNames[NtSys_N] = {
   "TES_UP",
   "TES_DN",
   "JVF_UP",
-  "JVF_DN"
+  "JVF_DN",
+  "NtSys_PHES_UP",
+  "NtSys_PHES_DN",
+  "NtSys_PHER_UP",
+  "NtSys_PHER_DN"
 };
 
 ///Enum for BTag SF & systematics

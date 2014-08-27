@@ -490,11 +490,11 @@ namespace Susy
       bool isConv;
 
       // Systematics - not current supported??
-      //float pes_up;        // Photon Energy Scale up
-      //float pes_dn;        // Photon Energy Scale down
-      //float per_up;        // Photon Energy Resolution up
-      //float per_dn;        // Photon Energy Resolution down
-      //void setState(int sys){ resetTLV();};
+      float pes_up;        // Photon Energy Scale up
+      float pes_dn;        // Photon Energy Scale down
+      float per_up;        // Photon Energy Resolution up
+      float per_dn;        // Photon Energy Resolution down
+      void setState(int sys){ resetTLV();};
       
       /// Print method
       void print() const {};
