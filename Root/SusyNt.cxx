@@ -124,7 +124,6 @@ Electron::Electron(const Electron &rhs):
   veryLooseLH(rhs.veryLooseLH),
   looseLH(rhs.looseLH),
   mediumLH(rhs.mediumLH),
-  tightLH(rhs.tightLH),
   veryTightLH(rhs.veryTightLH),
   etcone30Corr(rhs.etcone30Corr),
   topoEtcone30Corr(rhs.topoEtcone30Corr),
@@ -158,7 +157,6 @@ Electron& Electron::operator=(const Electron &rhs)
     veryLooseLH = rhs.veryLooseLH;
     looseLH = rhs.looseLH;
     mediumLH = rhs.mediumLH;
-    tightLH = rhs.tightLH;
     veryTightLH = rhs.veryTightLH;
     etcone30Corr = rhs.etcone30Corr;
     topoEtcone30Corr = rhs.topoEtcone30Corr;
