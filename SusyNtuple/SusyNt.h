@@ -270,8 +270,14 @@ namespace Susy
       bool veryLooseLH;
       bool looseLH;
       bool mediumLH;
-      bool tightLH;
       bool veryTightLH;
+
+      float mediumEffSF;
+      float errMediumEffSF;
+      float mediumLHEffSF;
+      float errMediumLHEffSF;
+      float veryTightLHEffSF;
+      float errVeryTightLHEffSF;
 
       // New isolation variables, put them here for now
       float etcone30Corr;       ///< Pt and ED corrected etcone iso
@@ -307,7 +313,10 @@ namespace Susy
       void clear(){
         clusE = clusEta = clusPhi = trackPt = 0;
         mediumPP = tightPP = false;
-	looseRelaxedLH = veryLooseLH = looseLH = mediumLH = tightLH = veryTightLH = false;
+	looseRelaxedLH = veryLooseLH = looseLH = mediumLH = veryTightLH = false;
+	mediumEffSF = mediumLHEffSF = veryTightLHEffSF = 1.;
+	errMediumEffSF = errMediumLHEffSF = errVeryTightLHEffSF = 0;
+	
         etcone30Corr = topoEtcone30Corr = 0;
         isChargeFlip = false;
 	//ees_up = ees_dn = eer_up = eer_dn = 0;
