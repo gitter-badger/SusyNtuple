@@ -494,6 +494,7 @@ namespace Susy
       float pes_dn;        // Photon Energy Scale down
       float per_up;        // Photon Energy Resolution up
       float per_dn;        // Photon Energy Resolution down
+      float topoEtcone40_corrected;
       void setState(int sys){ resetTLV();};
       
       /// Print method
@@ -501,7 +502,7 @@ namespace Susy
 
       /// Clear
       void clear(){
-	//pes_up = pes_dn = per_up = per_dn = 0;
+	pes_up = pes_dn = per_up = per_dn = topoEtcone40_corrected = 0;
 	isConv = false;
 	Particle::clear();
       };

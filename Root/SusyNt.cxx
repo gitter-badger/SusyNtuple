@@ -447,7 +447,12 @@ void Tau::print() const
 /*--------------------------------------------------------------------------------*/
 Photon::Photon(const Photon &rhs):
   Particle(rhs),
-  isConv(rhs.isConv)
+  isConv(rhs.isConv),
+  pes_up(rhs.pes_up),
+  pes_dn(rhs.pes_dn),
+  per_up(rhs.per_up),
+  per_dn(rhs.per_dn),
+  topoEtcone40_corrected(rhs.topoEtcone40_corrected)
 {
 }
 /*--------------------------------------------------------------------------------*/
@@ -458,6 +463,11 @@ Photon& Photon::operator=(const Photon &rhs)
   if (this != &rhs) {
     Particle::operator=(rhs);
     isConv  = rhs.isConv; 
+    pes_up  = rhs.pes_up; 
+    pes_dn  = rhs.pes_dn; 
+    per_up  = rhs.per_up; 
+    per_dn  = rhs.per_dn; 
+    topoEtcone40_corrected  = rhs.topoEtcone40_corrected; 
   }
   return *this;
 }
