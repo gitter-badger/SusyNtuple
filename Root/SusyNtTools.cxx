@@ -1296,6 +1296,7 @@ int SusyNtTools::cleaningCutFlags(int ntCutFlag,
                                   const JetVector& preJets, const JetVector& baseJets)
 {
   int cutMask = ECut_GRL | ECut_LarErr | ECut_TTC | ECut_GoodVtx | ECut_TileTrip;
+  cutMask = cutMask | ECut_TileErr | ECut_SmartVeto | ECut_ValidMu ;
   int cutFlags = ntCutFlag & cutMask;
   if(!hasBadMuon(preMuons))     cutFlags |= ECut_BadMuon;
   if(!hasCosmicMuon(baseMuons)) cutFlags |= ECut_Cosmic;
