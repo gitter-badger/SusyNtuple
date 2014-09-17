@@ -590,7 +590,8 @@ bool SusyNtTools::isSignalElectron(const Electron* ele,
        << " Z0sin: " << fabs(ele->z0SinTheta(true))
        << endl;
 
-  if(m_anaType == Ana_2LMONOJET){ if(!ele->mediumPP) return false; }
+  //if(m_anaType == Ana_2LMONOJET){ if(!ele->mediumPP) return false; }
+  if(m_anaType == Ana_2LMONOJET){ if(!ele->tightPP) return false; }
   else{ if(!ele->tightPP) return false; }
 
   // Impact parameter
