@@ -7,7 +7,7 @@
 #include "TTree.h"
 #include "TObjArray.h"
 #include "TChainElement.h"
-#include "TH1F.h"
+#include "TH1D.h"
 
 #include <iostream>
 #include <cstdlib> // atoi
@@ -77,7 +77,7 @@ void MCWeighter::buildSumwMapFromTree(TTree* tree)
   if(!sumwmapHasKey(genKey)) m_sumwMap[genKey] = 0;
 
   // Get the generator weighted histogram
-  TH1F* hGenCF = (TH1F*) f->Get("genCutFlow");
+  TH1D* hGenCF = (TH1D*) f->Get("genCutFlow");
 
   int sumwBin = hGenCF->GetXaxis()->FindBin(m_labelBinCounter.c_str());
   m_sumwMap[genKey] += hGenCF->GetBinContent(sumwBin);
@@ -93,7 +93,7 @@ void MCWeighter::buildSumwMapFromTree(TTree* tree)
       // Histo is named procCutFlowXYZ where XYZ is the process number
       string prefix = "procCutFlow";
       if(histoName.find(prefix) != string::npos){
-        TH1F* hProcCF = (TH1F*) obj;
+        TH1D* hProcCF = (TH1D*) obj;
 
         // Extract the process ID (XYZ) from the histo name (procCutFlowXYZ)
         string procString = histoName.substr(prefix.size(), string::npos);
