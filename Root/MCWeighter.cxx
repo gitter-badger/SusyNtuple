@@ -20,7 +20,7 @@ using namespace Susy;
 /*--------------------------------------------------------------------------------*/
 // Constructor
 /*--------------------------------------------------------------------------------*/
-MCWeighter::MCWeighter(TTree* tree, string xsecDir) :
+MCWeighter::MCWeighter(TTree* tree, string xsecDir, const char* chain_name) :
         m_useProcSumw(true),
         m_sumwMethod(Sumw_MAP),
         m_xsecMethod(Xsec_ST),
@@ -28,7 +28,7 @@ MCWeighter::MCWeighter(TTree* tree, string xsecDir) :
         m_labelBinCounter(MCWeighter::defaultLabelBinCounter()),
         m_warningCounter(0)
 {
-  if(tree) buildSumwMap(tree);
+  if(tree) buildSumwMap(tree, chain_name);
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -49,10 +49,10 @@ MCWeighter::~MCWeighter()
 // However, one can have more than one (complete) dataset in the chain, which is why
 // we use the map.
 /*--------------------------------------------------------------------------------*/
-void MCWeighter::buildSumwMap(TTree* tree)
+void MCWeighter::buildSumwMap(TTree* tree, const char* chain_name)
 {
   if(tree->InheritsFrom("TChain")){
-    buildSumwMapFromChain(dynamic_cast<TChain*>(tree));
+    buildSumwMapFromChain(dynamic_cast<TChain*>(tree),chain_name);
   }
   else buildSumwMapFromTree(tree);
 
@@ -121,7 +121,7 @@ void MCWeighter::buildSumwMapFromTree(TTree* tree)
   delete evt; // clean up memory
 }
 /*--------------------------------------------------------------------------------*/
-void MCWeighter::buildSumwMapFromChain(TChain* chain)
+void MCWeighter::buildSumwMapFromChain(TChain* chain, const char* chain_name)
 {
   // Loop over files in the chain
   TObjArray* fileElements = chain->GetListOfFiles();
@@ -132,7 +132,7 @@ void MCWeighter::buildSumwMapFromChain(TChain* chain)
     TFile* f = TFile::Open(fileTitle.Data());
 
     // Get the tree, for extracting mcid
-    TTree* tree = (TTree*) f->Get("susyNt");
+    TTree* tree = (TTree*) f->Get(chain_name);
 
     buildSumwMapFromTree(tree);
 

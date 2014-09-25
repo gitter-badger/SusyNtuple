@@ -70,7 +70,8 @@ class MCWeighter
 
     // Constructor and destructor
     MCWeighter(TTree* tree,
-               std::string xsecDir="$ROOTCOREDIR/data/SUSYTools/mc12_8TeV/");
+               std::string xsecDir="$ROOTCOREDIR/data/SUSYTools/mc12_8TeV/",
+	       const char* chain_name="susyNt");
     ~MCWeighter();
 
     /// Build a map of MCID -> sumw.
@@ -83,7 +84,7 @@ class MCWeighter
      However, one can have more than one (complete) dataset in the chain, which is why
      we use the map.
     */
-    void buildSumwMap(TTree* tree);
+    void buildSumwMap(TTree* tree, const char* chain_name="susyNt");
     void clearAndRebuildSumwMap(TTree* tree) { m_sumwMap.clear(); buildSumwMap(tree); }
     void dumpSumwMap() const;
     void dumpXsecCache() const;
@@ -140,7 +141,7 @@ class MCWeighter
     static std::vector<int> readDsidsFromSusyCrossSectionFile(std::string filename, bool verbose);
  private:
     void buildSumwMapFromTree(TTree* tree);
-    void buildSumwMapFromChain(TChain* chain);
+    void buildSumwMapFromChain(TChain* chain, const char* chain_name="susyNt");
 
     bool m_useProcSumw;
 
