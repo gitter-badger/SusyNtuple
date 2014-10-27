@@ -28,6 +28,7 @@ MCWeighter::MCWeighter(TTree* tree, string xsecDir, const char* chain_name) :
         m_labelBinCounter(MCWeighter::defaultLabelBinCounter()),
         m_warningCounter(0)
 {
+  m_sumwMap.clear();
   if(tree) buildSumwMap(tree, chain_name);
 }
 

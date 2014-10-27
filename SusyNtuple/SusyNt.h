@@ -143,7 +143,7 @@ namespace Susy
 	
       /// Systematic-shifted state for particles.
       /** Base class method simply resets */
-      void setState(int sys){ resetTLV(); };
+      void setState(int /*sys*/){ resetTLV(); };
 
       void clear() { 
 	TLorentzVector::Clear(); 
@@ -225,7 +225,7 @@ namespace Susy
       // Polymorphism, baby!!
       virtual bool isEle() const { return false; }
       virtual bool isMu()  const { return false; }
-      void setState(int sys){ resetTLV(); }
+      void setState(int /*sys*/){ resetTLV(); }
 
       /// Print method
       virtual void print() const {};
@@ -504,7 +504,7 @@ namespace Susy
       float per_up;        // Photon Energy Resolution up
       float per_dn;        // Photon Energy Resolution down
       float topoEtcone40_corrected;
-      void setState(int sys){ resetTLV();};
+      void setState(int /*sys*/){ resetTLV();};
       
       /// Print method
       void print() const {};
