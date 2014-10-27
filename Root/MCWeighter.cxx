@@ -28,6 +28,7 @@ MCWeighter::MCWeighter(TTree* tree, string xsecDir, const char* chain_name) :
         m_labelBinCounter(MCWeighter::defaultLabelBinCounter()),
         m_warningCounter(0)
 {
+  m_sumwMap.clear();
   if(tree) buildSumwMap(tree, chain_name);
 }
 
@@ -129,6 +130,7 @@ void MCWeighter::buildSumwMapFromChain(TChain* chain, const char* chain_name)
   TChainElement* chainElement = 0;
   while((chainElement = (TChainElement*)next())){
     TString fileTitle = chainElement->GetTitle();
+    cout << "tree: " << fileTitle.Data() << endl;
     TFile* f = TFile::Open(fileTitle.Data());
 
     // Get the tree, for extracting mcid

@@ -1386,6 +1386,22 @@ bool SusyNtTools::passBCHCleaningTight(const JetVector& preJets)
 }
 
 /*--------------------------------------------------------------------------------*/
+// Pass Dead Region based on met, jets and run number
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::passBCHCleaningMedium(const JetVector& preJets)
+{
+  // Info taken from here:
+  // https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/BCHCleaningTool#Cuts_based_on_BCH_CORR_CELL_IsBa
+  // uses analysis jets
+  for(uint ij = 0; ij<preJets.size(); ++ij){
+    const Jet* jet = preJets.at(ij);
+    if(jet->isBadMediumBCH) return false;
+  }
+
+  return true;
+}
+
+/*--------------------------------------------------------------------------------*/
 // Lepton flavor methods (moved from SusyDefs)
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isSameFlav(const Lepton* l1, const Lepton* l2)
