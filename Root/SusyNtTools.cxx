@@ -639,12 +639,18 @@ bool SusyNtTools::isSignalMuon(const Muon* mu,
 {
   bool mu_debug=false;
   if(mu_debug) cout << "muon pt: " << mu->Pt()
-       << " d0Sig: " << fabs(mu->d0Sig(true))
+       << " d0Sig_t: " << fabs(mu->d0Sig(true))
+       << " d0Sig_f: " << fabs(mu->d0Sig(false))
        << " Z0sin: " << fabs(mu->z0SinTheta(true))
+       << " MUON_D0SIG_CUT: " << MUON_D0SIG_CUT
+       << " MUON_Z0_SINTHETA_CUT: " << MUON_Z0_SINTHETA_CUT
+       << " MUON_ETA_CUT: " << MUON_ETA_CUT
+       << " eta: " << mu->Eta()
        << endl;
 
   // eta cut for mono-jet. 
-  if(m_anaType == Ana_2LMONOJET){ if(fabs(mu->Eta()) >= MUON_ETA_CUT) return false; }
+  if(m_anaType == Ana_2LMONOJET){ if(fabs(mu->Eta()) >= MUON_ETA_CUT_MONOJET) return false; }
+  //if(m_anaType == Ana_2LMONOJET){ if(fabs(mu->Eta()) >= MUON_ETA_CUT) return false; }
 
   // Impact parameter
   if(m_doIPCut){
@@ -654,7 +660,7 @@ bool SusyNtTools::isSignalMuon(const Muon* mu,
     if(fabs(mu->d0Sig(true)) >= MUON_D0SIG_CUT) return false;
     if(fabs(mu->z0SinTheta(true)) >= MUON_Z0_SINTHETA_CUT) return false;
   }
-
+  //cout << "moving to iso: " << m_anaType << endl;
   // ptcone isolation cut with pileup correction
   if(m_doPtconeCut){ // true by default
     if(m_anaType == Ana_3Lep){

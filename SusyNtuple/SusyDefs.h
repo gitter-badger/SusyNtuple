@@ -514,9 +514,10 @@ const float JET_SIGNAL_PT_CUT_3L = 20; // GeV
 const float JET_SIGNAL_PT_CUT_2L = 30; // GeV
 
 // Eta
-const float ELECTRON_ETA_CUT = 2.47; // Currently applied in SusyNtMaker
-const float MUON_ETA_CUT     = 2.4;  // Currently applied in SusyNtMaker
-const float JET_ETA_CUT      = 2.5;  // Cut in SusyNtMaker is 4.9 Maybe change?
+const float ELECTRON_ETA_CUT     = 2.47; // Currently applied in SusyNtMaker
+const float MUON_ETA_CUT         = 2.4;  // Currently applied in SusyNtMaker
+const float MUON_ETA_CUT_MONOJET = 2.5;  // Currently applied in SusyNtMaker Monojet
+const float JET_ETA_CUT          = 2.5;  // Cut in SusyNtMaker is 4.9 Maybe change?
                                      // --> No, 2.5 is SIGNAL JET eta!!
 const float JET_JVF_CUT      = 0.5; 
 //const float JET_JVF_CUT_2L   = 0.2;  
