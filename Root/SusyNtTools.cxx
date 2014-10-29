@@ -673,6 +673,9 @@ bool SusyNtTools::isSignalMuon(const Muon* mu,
       if(mu_debug) cout << "      muon ptcone30: " << ptcone30/pt << endl;
       if(m_anaType == Ana_2LepWH){
 	if(ptcone30/std::min(pt,MUON_ISO_PT_THRS) >= MUON_PTCONE30ELSTYLE_PT_WH_CUT) return false;
+      }else if(m_anaType == Ana_2LMONOJET){
+	if(ptcone30/mu->Pt() >= MUON_PTCONE30ELSTYLE_PT_CUT_MONOJET && mu->Pt()<15.0) return false; // tighten isolation only for pT<15 GeV
+	else if(ptcone30/mu->Pt() >= MUON_PTCONE30ELSTYLE_PT_CUT) return false;
       }
       else 
 	if(ptcone30/mu->Pt() >= MUON_PTCONE30ELSTYLE_PT_CUT) return false;
@@ -688,7 +691,12 @@ bool SusyNtTools::isSignalMuon(const Muon* mu,
     float etcone30 = muEtConeCorr(mu, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
     float pt = mu->Pt();
     if(pt==0.0 || (etcone30/std::min(pt,MUON_ISO_PT_THRS) >= MUON_ETCONE30_PT_WH_CUT)) return false;    
+  } else if(m_anaType == Ana_2LMONOJET) {
+    float etcone30 = muEtConeCorr(mu, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
+    if(mu_debug) cout << "      muon etcone30: " << etcone30/mu->Pt() << endl;
+    if(etcone30/mu->Pt() >= MUON_ETCONE30_PT_CUT_MONOJET && mu->Pt() < 15.0) return false;   // tighten isolation only for pT<15 GeV
   }
+
   if(mu_debug) cout << "     accept muon " << endl;
   return true;
 }
@@ -1401,6 +1409,8 @@ bool SusyNtTools::passBCHCleaningMedium(const JetVector& preJets)
   // uses analysis jets
   for(uint ij = 0; ij<preJets.size(); ++ij){
     const Jet* jet = preJets.at(ij);
+    //cout << "jet->isBadMediumBCH: " << jet->isBadMediumBCH 
+    //<< " pt: " << jet->Pt() << endl;
     if(jet->isBadMediumBCH) return false;
   }
 
