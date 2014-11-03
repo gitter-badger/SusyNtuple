@@ -1,6 +1,7 @@
 #include "SusyNtuple/mc_truth_utils.h"
 
 #include <algorithm>
+#include <stdlib.h>
 
 using namespace susy::mc;
 using susy::mc::IntermediateParentWalker;
@@ -83,7 +84,7 @@ bool IsSmTopIndex::isTop(const int &i)
 }
 bool IsSmTopIndex::isTopChild(const int &i)
 {
-    const int p=abs(pdgs_[i]);
+  const int p=abs(pdgs_[i]);
     return(p==kPd || p==kPs || p==kPb || p==kPw || p==kPglu); // can radiate gluon
 }
 bool IsSmTopIndex::areAllTopChildren(const int &itop)
@@ -120,7 +121,7 @@ bool IsDecayingWIndex::isWintermediate(const int &iW)
 }
 bool IsDecayingWIndex::isWChild(const int &i)
 {
-    const int p=abs(pdgs_[i]);
+  const int p=abs(pdgs_[i]);
     return(p==kPd || p==kPu || p==kPs || p==kPc || p==kPb
            || p==kPel || p==kPve || p==kPmu || p==kPvm || p==kPtau || p==kPvt
            || p==kPgam); // can radiate gamma
