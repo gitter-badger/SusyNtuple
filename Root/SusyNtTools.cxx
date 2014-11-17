@@ -2326,12 +2326,28 @@ bool SusyNtTools::isSherpaSample(unsigned int mcID)
   // Sherpa diboson
   if(mcID >= 126892 && mcID <= 126895) return true;
   if(mcID == 126989) return true;
+  if(mcID >= 185393 && mcID <= 185396) return true;
+  if(mcID == 189532) return true;
+  if(mcID == 179974) return true;
+  if(mcID == 126739) return true;
+  if(mcID == 126742) return true;
+  if(mcID == 126854) return true;
+  if(mcID == 126856) return true;
+  if(mcID == 126988) return true;
+  if(mcID == 126989) return true;
+  if(mcID >= 181471 && mcID <= 181479) return true;
+  if(mcID >= 173041 && mcID <= 173046) return true;
+  if(mcID >= 167806 && mcID <= 167808) return true;
+  if(mcID >= 157814 && mcID <= 157819) return true;
+  if(mcID >= 147770 && mcID <= 147772) return true;
+  if(mcID >= 147191 && mcID <= 147196) return true;
   // Z + LF/HF
   if(mcID >= 128975 && mcID <= 128977) return true;
   if(mcID >= 146820 && mcID <= 146822) return true;
   // W/Z inclusive
   if(mcID >= 147770 && mcID <= 147776) return true;
-
+  // low mass Z
+  if(mcID >= 183999 && mcID <= 183998) return true;
   return false;
 }
 //----------------------------------------------------------

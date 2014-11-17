@@ -519,14 +519,22 @@ stringvector getTrigChains();
 // into 2L and 3L separately, but that leads to duplications
 
 // Pt
-const float ELECTRON_PT_CUT          = 10.; // GeV
-const float MUON_PT_CUT              = 10.; // GeV
+//const float ELECTRON_PT_CUT          = 10.; // GeV
+//const float MUON_PT_CUT              = 10.; // GeV
 const float TAU_PT_CUT               = 20.; // GeV
 const float ELECTRON_PT_CUT_MONOJET  = 7.; // GeV
 const float MUON_PT_CUT_MONOJET      = 5.; // GeV
 
-const float MLL_MIN          = 12.0;
+//const float MLL_MIN          = 12.0;
 const float MLL_MIN_MONJET   = 2.0;
+
+// these are hacked in
+const float ELECTRON_PT_CUT  = 7; // GeV
+const float MUON_PT_CUT      = 5; // GeV
+const float TAU_PT_CUT       = 20; // GeV
+
+const float MLL_MIN          = 2;
+// end hacked in
 
 // TODO: Do we have a common jet pt cut now?
 const float JET_PT_CUT           = 20; // GeV
