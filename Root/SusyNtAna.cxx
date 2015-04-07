@@ -191,12 +191,14 @@ void SusyNtAna::clearObjects()
   m_baseTaus.clear();
   m_baseLeptons.clear();
   m_baseJets.clear();
+  m_baseFatJets.clear();        //> fatjet
   m_signalElectrons.clear();
   m_signalMuons.clear();
   m_signalLeptons.clear();
   m_signalTaus.clear();
   m_signalJets.clear();
   m_signalJets2Lep.clear();
+  m_signalFatJets.clear();      //> fatjet
   m_mediumTaus.clear();
   m_tightTaus.clear();
   m_met = NULL;

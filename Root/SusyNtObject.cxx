@@ -19,7 +19,8 @@ SusyNtObject::SusyNtObject():
         met(this, "met", 0),
         tpr(this, "truthParticles", 0),
         tjt(this, "truthJets", 0),
-        tmt(this, "truthMet", 0)
+        tmt(this, "truthMet", 0),
+        fjt(this, "fatJets", 0)
 {
 }
 
@@ -36,7 +37,8 @@ SusyNtObject::SusyNtObject(const Long64_t& entry):
         met(this, "met", &entry),
         tpr(this, "truthParticles", &entry),
         tjt(this, "truthJets", &entry),
-        tmt(this, "truthMet", &entry)
+        tmt(this, "truthMet", &entry),
+        fjt(this, "fatJets", &entry)
 {
 }
 
@@ -55,6 +57,7 @@ void SusyNtObject::SetActive()
   tpr.SetActive(true); 
   tjt.SetActive(true); 
   tmt.SetActive(true);
+  fjt.SetActive(true);
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -72,6 +75,7 @@ void SusyNtObject::WriteTo(TTree* tree)
   tpr.WriteTo(tree);
   tjt.WriteTo(tree);
   tmt.WriteTo(tree);
+  fjt.WriteTo(tree);
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -89,6 +93,7 @@ void SusyNtObject::ReadFrom(TTree* tree)
   tpr.ReadFrom(tree);
   tjt.ReadFrom(tree);
   tmt.ReadFrom(tree);
+  fjt.ReadFrom(tree);
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -106,4 +111,5 @@ void SusyNtObject::clear()
   tpr()->clear();
   tjt()->clear();
   tmt()->clear();
+  fjt()->clear();
 }

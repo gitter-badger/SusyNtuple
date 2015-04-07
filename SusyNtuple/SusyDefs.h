@@ -26,6 +26,7 @@ namespace Susy {
     class TruthParticle;
     class TruthJet;
     class TruthMet;
+    class FatJet; //> fatjet
 }
 
 //-----------------------------------------------------------------------------------
@@ -68,6 +69,7 @@ typedef std::vector<Susy::Tau*>           TauVector;
 typedef std::vector<Susy::Jet*>           JetVector;
 typedef std::vector<Susy::TruthParticle*> TruthParticleVector;
 typedef std::vector<Susy::TruthJet*>      TruthJetVector;
+typedef std::vector<Susy::FatJet*>        FatJetVector; //>fatjet
 
 typedef std::pair<unsigned int, int> SumwMapKey;
 typedef std::map<SumwMapKey, float> SumwMap;

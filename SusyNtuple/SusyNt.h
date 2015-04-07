@@ -859,7 +859,30 @@ namespace Susy
     }
 
     ClassDef(TruthMet, 1);
-  };
+  }; 
+
+    /// FatJet class
+    class FatJet : public Jet
+    {
+    public:
+        FatJet() { clear(); }
+        virtual ~FatJet(){};
+        FatJet(const FatJet &);
+        /** Assignment operator **/
+        FatJet& operator=(const FatJet &);
+
+        float jetmass;          ///< Jet mass
+
+        void print() const;
+
+        // Clear vars
+        void clear(){
+            jetmass = 0;
+
+            Particle::clear();
+    }
+    ClassDef(FatJet, 1);
+    };
 
 };
 

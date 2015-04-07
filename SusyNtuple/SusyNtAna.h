@@ -160,6 +160,7 @@ class SusyNtAna : public TSelector, public SusyNtTools
     LeptonVector        m_baseLeptons;          ///< baseline leptons
     TauVector           m_baseTaus;             ///< baseline taus
     JetVector           m_baseJets;             ///< baseline jets
+    FatJetVector        m_baseFatJets;          //> fatjet
 
     ElectronVector      m_signalElectrons;      ///< signal electrons
     MuonVector          m_signalMuons;          ///< signal muons
@@ -167,6 +168,9 @@ class SusyNtAna : public TSelector, public SusyNtTools
     TauVector           m_signalTaus;           ///< signal taus
     JetVector           m_signalJets;           ///< signal jets
     JetVector           m_signalJets2Lep;       ///< signal jets for 2 Lep
+    FatJetVector        m_signalFatJets;        //> fatjet
+    
+    
 
     // New organization of tau selections
     TauVector           m_mediumTaus;           ///< taus with medium ID

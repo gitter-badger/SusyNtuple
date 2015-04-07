@@ -987,3 +987,31 @@ void TruthMet::print() const
   cout.precision(6);
   cout.unsetf(ios_base::fixed);
 }
+/*--------------------------------------------------------------------------------*/
+// FatJet Constructor
+/*--------------------------------------------------------------------------------*/
+FatJet::FatJet(const FatJet &rhs):
+    Jet(rhs),
+    jetmass(rhs.jetmass)
+{
+}
+/*--------------------------------------------------------------------------------*/
+// Assignment operator
+/*--------------------------------------------------------------------------------*/
+FatJet& FatJet::operator=(const FatJet &rhs)
+{
+    if (this != &rhs) {
+        Particle::operator=(rhs);
+        jetmass = rhs.jetmass;
+    }
+    return *this;
+}
+/*--------------------------------------------------------------------------------*/
+// FatJet print
+/*--------------------------------------------------------------------------------*/
+void FatJet::print() const
+{
+   cout.precision(2);
+   cout << fixed << "dummy printing FatJet" << endl;
+   cout.unsetf(ios_base::fixed);
+} 

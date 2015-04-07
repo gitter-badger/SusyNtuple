@@ -51,6 +51,7 @@
 #pragma link C++ class Susy::TruthParticle+;
 #pragma link C++ class Susy::TruthJet+;
 #pragma link C++ class Susy::TruthMet+;
+#pragma link C++ class Susy::FatJet+;
 
 // STL
 #pragma link C++ class std::vector< Susy::Particle >+;
@@ -64,6 +65,7 @@
 #pragma link C++ class std::vector< Susy::TruthParticle >+;
 #pragma link C++ class std::vector< Susy::TruthJet >+;
 #pragma link C++ class std::vector< Susy::TruthMet >+;
+#pragma link C++ class std::vector< Susy::FatJet >+;
 
 //Tools //optional to have this here ?
 #pragma link C++ class SusyNtTools+;
