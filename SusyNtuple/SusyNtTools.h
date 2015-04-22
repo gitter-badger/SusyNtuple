@@ -208,14 +208,6 @@ public:
     /// Pass FEB dead region check
     bool passDeadRegions(const JetVector& preJets, const Susy::Met* met, int RunNumber, bool isMC);
 
-    /// Object selection control toggles
-    /** Currently all are on by default except muon etcone */
-    void setDoPtcone(bool doPtcone = true) { m_doPtconeCut = doPtcone; }
-    void setDoElEtcone(bool doElEtcone = true) { m_doElEtconeCut = doElEtcone; }
-    void setDoMuEtcone(bool doMuEtcone = false) { m_doMuEtconeCut = doMuEtcone; }
-    void setDoIP(bool doIP = true) { m_doIPCut = doIP; }
-
-
     //
     // Methods to get useful quantities for event, leptons, or jets
     // Moving global functions from SusyDefs here
