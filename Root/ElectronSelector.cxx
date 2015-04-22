@@ -14,6 +14,7 @@ using std::endl;
 
 namespace Susy {
 
+// ---------------------------------------------- 
 void ElectronSelector::buildRequirements(const AnalysisType &a)
 {
     switch(a) {
@@ -120,9 +121,9 @@ void ElectronSelector::buildRequirements(const AnalysisType &a)
 
     } // end switch
 }
-// -------------------------------------------------------------------------------------------- //
+// ------------------------------------------------------------------------------ //
 // Constructor
-// -------------------------------------------------------------------------------------------- //
+// ------------------------------------------------------------------------------ //
 ElectronSelector::ElectronSelector(): 
     m_systematic(NtSys::NOM),
     m_analysis(Ana_N),
@@ -136,20 +137,24 @@ ElectronSelector::ElectronSelector():
     m_verbose(false)
 {
 }
-// ---------------------------------------------------------
+// ----------------------------------------------
 ElectronSelector& ElectronSelector::setSystematic(const NtSys::SusyNtSys &s)
 {
     m_systematic = s;
     return *this;
 }
-// ---------------------------------------------------------
+// ----------------------------------------------
 ElectronSelector& ElectronSelector::setAnalysis(const AnalysisType &a)
 {
     m_analysis = a;
     buildRequirements(a);
     return *this;
 }
-// ---------------------------------------------------------
+// ----------------------------------------------
+
+// ------------------------------------------------------------------------------ //
+//  ElectronSelector Methods
+// ------------------------------------------------------------------------------ //
 bool ElectronSelector::isSignalElectron(const Electron* ele,
                                         const ElectronVector& baseElectrons,
                                         const MuonVector& baseMuons,
@@ -159,7 +164,9 @@ bool ElectronSelector::isSignalElectron(const Electron* ele,
     /////////////////////////////
     // Electron ID
     /////////////////////////////
-    if (!ele->tightPP) return false;
+    if(m_2lep || m_3lep || m_2lepWH) {
+        if(!ele->tightPP) return false;
+    }
      
     /////////////////////////////
     // Impact parameter
@@ -168,38 +175,40 @@ bool ElectronSelector::isSignalElectron(const Electron* ele,
         if(fabs(ele->d0Sig()) >= EL_MAX_D0SIG_CUT) return false;
         if(fabs(ele->z0SinTheta()) >= EL_MAX_Z0_SINTHETA) return false;
     }
-    float pt = ele->Pt();
     /////////////////////////////
     // ptcone isolation
     /////////////////////////////
+    float pt = ele->Pt();
     if(m_doPtconeCut) {
         float ptcone30 = elPtConeCorr(ele, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso); 
         if(m_2lepWH){
             if(ptcone30/std::min(pt, EL_ISO_PT_THRS) >= EL_PTCONE30_PT_CUT) return false;
         }
-        else 
+        else if(m_2lep || m_3lep) 
             if (ptcone30/pt >= EL_PTCONE30_PT_CUT) return false;
     }
     /////////////////////////////
     // topo etcone isolation
     /////////////////////////////
-    if(m_doElEtconeCut) { // true by default
+    if(m_doElEtconeCut) { 
         float etcone = elEtTopoConeCorr(ele, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
         if(m_2lepWH){
             if(etcone/std::min(pt,EL_ISO_PT_THRS) >= EL_TOPOCONE30_PT_CUT) return false;
         }
-        else
+        else if(m_2lep || m_3lep)
             if(etcone/pt >= EL_TOPOCONE30_PT_CUT) return false;
     }
     return true;
 }
-/* --------------------------------------------------------------------------------------------- */ 
+// ---------------------------------------------- 
 bool ElectronSelector::isSemiSignalElectron(const Electron* ele)
 {
     /////////////////////////////
     // Electron ID
     /////////////////////////////
-    if(!ele->tightPP) return false;
+    if(m_2lep || m_3lep || m_2lepWH) {
+        if(!ele->tightPP) return false;
+    }
 
     /////////////////////////////
     // Impact parameter
@@ -210,9 +219,9 @@ bool ElectronSelector::isSemiSignalElectron(const Electron* ele)
     }
     return true;
 }
-/* --------------------------------------------------------------------------------------------- */ 
-// Isolation
-/* --------------------------------------------------------------------------------------------- */
+// ------------------------------------------------------------------------------ // 
+//  Isolation
+// ------------------------------------------------------------------------------ //
 float ElectronSelector::elPtConeCorr(const Electron* ele,
                                      const ElectronVector& baseElectrons,
                                      const MuonVector& baseMuons,
@@ -239,7 +248,7 @@ float ElectronSelector::elPtConeCorr(const Electron* ele,
     }
     return ptcone;
 }
-/* --------------------------------------------------------------------------------------------- */
+// ---------------------------------------------- 
 float ElectronSelector::elEtTopoConeCorr(const Electron* ele,
                                      const ElectronVector& baseElectrons,
                                      const MuonVector& baseMuons,

@@ -238,11 +238,10 @@ ElectronVector SusyNtTools::getSignalElectrons(const ElectronVector& baseElecs, 
     ElectronVector sigElecs;
     for (uint ie = 0; ie < baseElecs.size(); ++ie) {
         Electron* e = baseElecs.at(ie);
-        if (isSignalElectron(e, baseElecs, baseMuons, nVtx, isMC, removeLepsFromIso)) {
+        if(m_electronSelector.isSignalElectron(e, baseElecs, baseMuons, nVtx, isMC, removeLepsFromIso)) {
             sigElecs.push_back(e);
         }
-    }
-
+    } // ie
     return sigElecs;
 }
 /*--------------------------------------------------------------------------------*/
@@ -252,11 +251,10 @@ MuonVector SusyNtTools::getSignalMuons(const MuonVector& baseMuons, const Electr
     MuonVector sigMuons;
     for (uint im = 0; im < baseMuons.size(); ++im) {
         Muon* mu = baseMuons.at(im);
-        if (isSignalMuon(mu, baseElecs, baseMuons, nVtx, isMC, removeLepsFromIso)) {
+        if(m_muonSelector.isSignalMuon(mu, baseElecs, baseMuons, nVtx, isMC, removeLepsFromIso)) {
             sigMuons.push_back(mu);
         }
-    }
-
+    } // im
     return sigMuons;
 }
 /*--------------------------------------------------------------------------------*/
@@ -456,209 +454,15 @@ bool SusyNtTools::isSignalLepton(const Lepton* l,
                                  const ElectronVector& baseElectrons, const MuonVector& baseMuons,
                                  uint nVtx, bool isMC, bool removeLepsFromIso)
 {
-    if (l->isEle()) return isSignalElectron((Electron*)l, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
-    else           return isSignalMuon((Muon*)l, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
+    if (l->isEle()) return m_electronSelector.isSignalElectron((Electron*)l, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
+    else           return m_muonSelector.isSignalMuon((Muon*)l, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
 };
-/*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isSignalElectron(const Electron* ele,
-                                   const ElectronVector& baseElectrons, const MuonVector& baseMuons,
-                                   uint nVtx, bool isMC, bool removeLepsFromIso)
-{
-    if (!ele->tightPP) return false;
-
-    // Impact parameter
-    if (m_doIPCut) {
-        // All ana using unbiased IP cuts
-        //if(fabs(ele->d0Sig(m_anaType == Ana_2Lep)) >= ELECTRON_D0SIG_CUT) return false;
-        //if(fabs(ele->z0SinTheta(m_anaType == Ana_2Lep)) >= ELECTRON_Z0_SINTHETA_CUT) return false;
-        float maxD0Sig = (m_anaType != Ana_2LepWH ? ELECTRON_D0SIG_CUT : ELECTRON_D0SIG_CUT_WH);
-        if (fabs(ele->d0Sig()) >= maxD0Sig) return false;
-        if (fabs(ele->z0SinTheta()) >= ELECTRON_Z0_SINTHETA_CUT) return false;
-    }
-
-    float pt = ele->Pt();
-
-    // Relative ptcone iso
-    if (m_doPtconeCut) { // true by default
-        float ptcone30 = elPtConeCorr(ele, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
-        if (m_anaType == Ana_2LepWH) {
-            if (ptcone30 / std::min(pt, ELECTRON_ISO_PT_THRS) >= ELECTRON_PTCONE30_PT_WH_CUT) return false;
-        }
-        else
-            if (ptcone30 / pt >= ELECTRON_PTCONE30_PT_CUT) return false;
-    }
-
-    // Topo etcone isolation cut
-    if (m_doElEtconeCut) { // true by default
-        float etcone = elEtTopoConeCorr(ele, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
-        if (m_anaType == Ana_2LepWH) {
-            if (etcone / std::min(pt, ELECTRON_ISO_PT_THRS) >= ELECTRON_TOPOCONE30_PT_WH_CUT) return false;
-        }
-        else
-            if (etcone / pt >= ELECTRON_TOPOCONE30_PT_CUT) return false;
-    }
-
-    return true;
-}
-
-/*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isSignalMuon(const Muon* mu,
-                               const ElectronVector& baseElectrons, const MuonVector& baseMuons,
-                               uint nVtx, bool isMC, bool removeLepsFromIso)
-{
-    // Impact parameter
-    if (m_doIPCut) {
-        // All ana using unbiased IP
-        //if(fabs(mu->d0Sig(m_anaType == Ana_2Lep)) >= MUON_D0SIG_CUT) return false;
-        //if(fabs(mu->z0SinTheta(m_anaType == Ana_2Lep)) >= MUON_Z0_SINTHETA_CUT) return false;
-        if (fabs(mu->d0Sig()) >= MUON_D0SIG_CUT) return false;
-        if (fabs(mu->z0SinTheta()) >= MUON_Z0_SINTHETA_CUT) return false;
-    }
-
-    // ptcone isolation cut with pileup correction
-    if (m_doPtconeCut) { // true by default
-        if (m_anaType == Ana_3Lep) {
-            float ptcone30 = muPtConeCorr(mu, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
-            if (ptcone30 / mu->Pt() >= MUON_PTCONE30_PT_CUT) return false;
-        }
-        else {
-            float ptcone30 = mu->ptcone30ElStyle; // no corrections at the moment
-            float pt = mu->Pt();
-            if (m_anaType == Ana_2LepWH) {
-                if (ptcone30 / std::min(pt, MUON_ISO_PT_THRS) >= MUON_PTCONE30ELSTYLE_PT_WH_CUT) return false;
-            }
-            else
-                if (ptcone30 / mu->Pt() >= MUON_PTCONE30ELSTYLE_PT_CUT) return false;
-        }
-    }
-
-    // etcone isolation cut - not applied by default, but here for studies
-    if (m_doMuEtconeCut) { // FALSE by default
-        float etcone30 = muEtConeCorr(mu, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
-        if (m_doMuEtconeCut && etcone30 / mu->Pt() >= MUON_ETCONE30_PT_CUT) return false;
-    }
-    else if (m_anaType == Ana_2LepWH) {
-        float etcone30 = muEtConeCorr(mu, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
-        float pt = mu->Pt();
-        if (pt == 0.0 || (etcone30 / std::min(pt, MUON_ISO_PT_THRS) >= MUON_ETCONE30_PT_WH_CUT)) return false;
-    }
-
-    return true;
-}
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isSignalTau(const Tau* tau, TauID tauJetID, TauID tauEleID, TauID tauMuoID)
 {
     // At the moment, signal taus only use additional BDT selection
     return isTauBDT(tau, tauJetID, tauEleID, tauMuoID);
 }
-/*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isSemiSignalElectron(const Electron* ele)
-{
-    if (!ele->tightPP) return false;
-    // Impact parameter
-    if (m_doIPCut) {
-        if (fabs(ele->d0Sig()) >= ELECTRON_D0SIG_CUT) return false;
-        if (fabs(ele->z0SinTheta()) >= ELECTRON_Z0_SINTHETA_CUT) return false;
-    }
-    return true;
-}
-/*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isSemiSignalMuon(const Muon* mu)
-{
-    // Impact parameter
-    if (m_doIPCut) {
-        if (fabs(mu->d0Sig()) >= MUON_D0SIG_CUT) return false;
-        if (fabs(mu->z0SinTheta()) >= MUON_Z0_SINTHETA_CUT) return false;
-    }
-    return true;
-}
-
-/*--------------------------------------------------------------------------------*/
-// Isolation corrections
-/*--------------------------------------------------------------------------------*/
-float SusyNtTools::elPtConeCorr(const Electron* e,
-                                const ElectronVector& baseElectrons, const MuonVector& baseMuons,
-                                uint /*nVtx*/, bool /*isMC*/, bool removeLeps)
-{
-    float ptcone = e->ptcone30;
-    if (removeLeps) {
-        for (uint iEl = 0; iEl < baseElectrons.size(); iEl++) {
-            const Electron* e2 = baseElectrons[iEl];
-            if (e == e2) continue;
-            if (!isSemiSignalElectron(e2)) continue;
-            float dR = e->DeltaR(*e2);
-            if (dR < 0.3) ptcone -= e2->trackPt;
-        }
-        for (uint iMu = 0; iMu < baseMuons.size(); iMu++) {
-            const Muon* mu = baseMuons[iMu];
-            if (!isSemiSignalMuon(mu)) continue;
-            float dR = e->DeltaR(*mu);
-            if (dR < 0.3) ptcone -= mu->idTrackPt;
-        }
-    }
-    return ptcone;
-}
-/*--------------------------------------------------------------------------------*/
-float SusyNtTools::elEtTopoConeCorr(const Electron* e,
-                                    const ElectronVector& baseElectrons, const MuonVector& baseMuons,
-                                    uint nVtx, bool isMC, bool removeLeps)
-{
-    float slope = isMC ? ELECTRON_TOPOCONE30_SLOPE_MC : ELECTRON_TOPOCONE30_SLOPE_DATA;
-    float etcone = e->topoEtcone30Corr - slope*nVtx;
-    if (removeLeps) {
-        for (uint iEl = 0; iEl < baseElectrons.size(); iEl++) {
-            const Electron* e2 = baseElectrons[iEl];
-            if (e == e2) continue;
-            if (!isSemiSignalElectron(e2)) continue;
-            float dR = e->DeltaR(*e2);
-            if (dR < 0.28) etcone -= e2->clusE / cosh(e2->clusEta);
-        }
-    }
-    return etcone;
-}
-/*--------------------------------------------------------------------------------*/
-float SusyNtTools::muPtConeCorr(const Muon* mu,
-                                const ElectronVector& baseElectrons, const MuonVector& baseMuons,
-                                uint nVtx, bool isMC, bool removeLeps)
-{
-    float slope = isMC ? MUON_PTCONE30_SLOPE_MC : MUON_PTCONE30_SLOPE_DATA;
-    float ptcone = mu->ptcone30 - slope*nVtx;
-    if (removeLeps) {
-        for (uint iEl = 0; iEl < baseElectrons.size(); iEl++) {
-            const Electron* e = baseElectrons[iEl];
-            if (!isSemiSignalElectron(e)) continue;
-            float dR = mu->DeltaR(*e);
-            if (dR < 0.3) ptcone -= e->trackPt;
-        }
-        for (uint iMu = 0; iMu < baseMuons.size(); iMu++) {
-            const Muon* mu2 = baseMuons[iMu];
-            if (mu == mu2) continue;
-            if (!isSemiSignalMuon(mu2)) continue;
-            float dR = mu->DeltaR(*mu2);
-            if (dR < 0.3) ptcone -= mu2->idTrackPt;
-        }
-    }
-    return ptcone;
-}
-/*--------------------------------------------------------------------------------*/
-float SusyNtTools::muEtConeCorr(const Muon* mu,
-                                const ElectronVector& baseElectrons, const MuonVector& baseMuons,
-                                uint nVtx, bool isMC, bool removeLeps)
-{
-    float k1 = isMC ? MUON_ETCONE30_K1_MC : MUON_ETCONE30_K1_DATA;
-    float k2 = isMC ? MUON_ETCONE30_K2_MC : MUON_ETCONE30_K2_DATA;
-    float etcone = mu->etcone30 - k1*nVtx - k2*nVtx*nVtx;
-    if (removeLeps) {
-        for (uint iEl = 0; iEl < baseElectrons.size(); iEl++) {
-            const Electron* e = baseElectrons[iEl];
-            if (!isSemiSignalElectron(e)) continue;
-            float dR = mu->DeltaR(*e);
-            if (dR < 0.28) etcone -= e->clusE / cosh(e->clusEta);
-        }
-    }
-    return etcone;
-}
-
 /*--------------------------------------------------------------------------------*/
 int SusyNtTools::numberOfCLJets(const JetVector& jets)
 {

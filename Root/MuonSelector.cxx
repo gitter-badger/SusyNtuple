@@ -14,6 +14,7 @@ using std::endl;
 
 namespace Susy {
 
+// ----------------------------------------------
 void MuonSelector::buildRequirements(const AnalysisType& a)
 {
     switch(a) {
@@ -145,11 +146,11 @@ void MuonSelector::buildRequirements(const AnalysisType& a)
     } // end switch
 }
 
-// -------------------------------------------------------------------------------------------- //
+// ------------------------------------------------------------------------------ //
 // Constructor
-// -------------------------------------------------------------------------------------------- //
+// ------------------------------------------------------------------------------ //
 MuonSelector::MuonSelector() :
-    m_systematic(NtSys::NOM),
+    m_systematic(NtSys::NOM), // TODO : do we need this? 
     m_analysis(Ana_N),
     m_doIPCut(true),
     m_doPtconeCut(true),
@@ -161,20 +162,22 @@ MuonSelector::MuonSelector() :
     m_verbose(false)
 {
 }
-// -------------------------------------------------------------------------------------------- //
+// ----------------------------------------------
 MuonSelector& MuonSelector::setSystematic(const NtSys::SusyNtSys &s)
 {
     m_systematic = s;
     return *this;
 }
-// -------------------------------------------------------------------------------------------- //
+// ----------------------------------------------
 MuonSelector& MuonSelector::setAnalysis(const AnalysisType &a)
 {
     m_analysis = a;
     buildRequirements(a);
     return *this;
 }
-// -------------------------------------------------------------------------------------------- //
+// ------------------------------------------------------------------------------ //
+//  MuonSelector Methods
+// ------------------------------------------------------------------------------ //
 bool MuonSelector::isSignalMuon(const Muon* mu,
                                 const ElectronVector& baseElectrons,
                                 const MuonVector& baseMuons,
@@ -213,7 +216,7 @@ bool MuonSelector::isSignalMuon(const Muon* mu,
     return true;
 }
 
-// -------------------------------------------------------------------------------------------- //
+// ----------------------------------------------
 bool MuonSelector::muPassPtIso(const Muon* mu,
                                const ElectronVector& baseElectrons,
                                const MuonVector& baseMuons,
@@ -236,7 +239,7 @@ bool MuonSelector::muPassPtIso(const Muon* mu,
     }
     return true;
 }
-// -------------------------------------------------------------------------------------------- //
+// ----------------------------------------------
 float MuonSelector::muPtConeCorr(const Muon* mu,
                                  const ElectronVector& baseElectrons,
                                  const MuonVector& baseMuons,
@@ -264,7 +267,7 @@ float MuonSelector::muPtConeCorr(const Muon* mu,
     }
     return ptcone;
 }
-// -------------------------------------------------------------------------------------------- //
+// ----------------------------------------------
 bool MuonSelector::isSemiSignalMuon(const Muon* mu)
 {
     /////////////////////////////
@@ -276,7 +279,7 @@ bool MuonSelector::isSemiSignalMuon(const Muon* mu)
     }
     return true;
 }
-// -------------------------------------------------------------------------------------------- //
+// ----------------------------------------------
 float MuonSelector::muEtConeCorr(const Muon* mu,
                                  const ElectronVector& baseElectrons, 
                                  const MuonVector& baseMuons,
