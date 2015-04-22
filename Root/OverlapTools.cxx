@@ -13,28 +13,54 @@ using std::endl;
 namespace Susy {
 
 
-// --------------------------------------------------------------------------------------------- //
+// ------------------------------------------------------------------------------ //
 // Constructor
-// --------------------------------------------------------------------------------------------- //
+// ------------------------------------------------------------------------------ //
 OverlapTools::OverlapTools() :
     m_doHarmonization(false),
     m_verbose(false)
 {
 }
-// --------------------------------------------------------------------------------------------- //
-OverlapTools& OverlapTools::setHarmonization()
+// ------------------------------------------------------------------------------ //
+OverlapTools& OverlapTools::setAnalysis(const AnalysisType& a)
 {
-    m_doHarmonization = true;
+    switch(a) {
+    ///////////////////////////////////
+    // Contrarian analyses
+    ///////////////////////////////////
+    case(Ana_2Lep) : 
+    case(Ana_3Lep) : 
+    case(Ana_2LepWH) : {
+        m_doHarmonization = false;
+        break;
+    }
+    ///////////////////////////////////
+    // Analyses using harmonized OR
+    ///////////////////////////////////
+    // None yet!
+    ///////////////////////////////////
+    // Too far, set default to Run-I
+    ///////////////////////////////////
+    case(Ana_N) : {
+        cout << "OverlapTools::setAnalysis() error: invalid analysis '" << a << "'" << endl;
+        cout << "           will apply default overlap procedure (Run-I)." << endl;
+#warning We should set the defaullt selections ffor tools to be a consistent AnaType
+        m_doHarmonization = false;
+        break;
+    }
+    } // switch
+
     return *this;
 }
-// --------------------------------------------------------------------------------------------- //
+// ------------------------------------------------------------------------------ //
 bool OverlapTools::doHarmonization()
 {
     return m_doHarmonization;
 }
-// --------------------------------------------------------------------------------------------- //
+// ------------------------------------------------------------------------------ //
 // Main overlap removal function
-// --------------------------------------------------------------------------------------------- //
+// ------------------------------------------------------------------------------ //
+
 void OverlapTools::performOverlap(ElectronVector& electrons, MuonVector& muons,
                                     TauVector& taus, JetVector& jets)
 {
@@ -68,11 +94,17 @@ void OverlapTools::performOverlap(ElectronVector& electrons, MuonVector& muons,
     // each other
     ///////////////////////////////////////////
     e_e_overlap(electrons);
+
+    // TODO: Add Tau overlaps
+    // if(!m_doHarmonization){
+    //    --> do tau overlap
+    //    --> harmonized OR doesn't include taus
+    //    }
 }
 
-// --------------------------------------------------------------------------------------------- //
+// ------------------------------------------------------------------------------ //
 // Components of Overlap Removal
-// --------------------------------------------------------------------------------------------- //
+// -----------------------------------------------------------------------------  //
 
 ////////////////////////////////////////////
 // Remove jets overlapping with electrons
@@ -151,7 +183,7 @@ void OverlapTools::m_j_overlap(MuonVector& muons, JetVector& jets)
 }
 
 ////////////////////////////////////////////
-// Remove electrons and muontsoverlapping 
+// Remove electrons and muons overlapping 
 // with one another
 //  E_M_DR = 0.01
 ////////////////////////////////////////////
@@ -231,6 +263,105 @@ void OverlapTools::e_e_overlap(ElectronVector& electrons)
         } // found one
     }
 }
+////////////////////////////////////////////
+// Remove muons overlapping with one another
+//  M_M_DR = 0.05
+////////////////////////////////////////////
+void OverlapTools::m_m_overlap(MuonVector& muons)
+{
+    uint nMu = muons.size();
+    if(nMu < 2) return;
+    
+    // if 2 muons overlap, flag both for removal
+    static std::set<const Muon*> muonsToRemove;
+    muonsToRemove.clear();
+    for(uint iMu=0; iMu<nMu; iMu++){
+        const Muon* imu = muons.at(iMu);
+        for(uint jMu=iMu+1; jMu<nMu; jMu++){
+            const Muon* jmu = muons.at(jMu);
+            if(imu->DeltaR(*jmu) < M_M_DR){
+                muonsToRemove.insert(imu);
+                muonsToRemove.insert(jmu);
+            } // if OR
+        } // jMu
+    } // iMu
+    // remove flagged muons
+    for(int iMu=nMu-1; iMu>=0; iMu--){
+        const Muon* mu = muons.at(iMu);
+        if(muonsToRemove.find(mu) != muonsToRemove.end()) {
+            muons.erase(muons.begin()+iMu);
+        } // remove
+    } // iMu
+}
+////////////////////////////////////////////
+// Remove taus overlapping with electrons
+//  T_E_DR = 0.2
+////////////////////////////////////////////
+void OverlapTools::t_e_overlap(TauVector& taus, ElectronVector& electrons)
+{
+    uint nTau = taus.size();
+    uint nEle = electrons.size();
+    if(nTau==0 || nEle==0) return;
+    for(int iTau=nTau-1; iTau>=0; iTau--){
+        const Tau* tau = taus.at(iTau);
+        for(int iEl=nEle-1; iEl>=0; iEl--){
+            const Electron* e = electrons.at(iEl);
+            if(tau->DeltaR(*e) < T_E_DR){
+                taus.erase(taus.begin()+iTau);
+                break; // loop tau doesn't exist anymore!
+            } // dR match
+        } // iEl
+    } // iTau
+}
+////////////////////////////////////////////
+// Remove taus overlapping with muons
+//  T_M_DR = 0.2
+////////////////////////////////////////////
+void OverlapTools::t_m_overlap(TauVector& taus, MuonVector& muons)
+{
+    uint nTau = taus.size();
+    uint nMuo = muons.size();
+    if(nTau==0 || nMuo==0) return;
+    for(int iTau=nTau-1; iTau>=0; iTau--){
+        const Tau* tau = taus.at(iTau);
+        for(int iMu=nMuo-1; iMu>=0; iMu--){
+            const Muon* mu = muons.at(iMu);
+            if(tau->DeltaR(*mu) < T_M_DR){
+                taus.erase(taus.begin()+iTau);
+                break; // loop tau doesn't exist anymore!
+            } // dR match
+        } // iMu
+    } // iTau
+}
+////////////////////////////////////////////
+// Remove jets overlapping with taus
+//  J_T_DR = 0.2
+////////////////////////////////////////////
+void OverlapTools::j_t_overlap(TauVector& taus, JetVector& jets)
+{
+    uint nTau=taus.size();
+    uint nJet=jets.size();
+    if(nTau==0 || nJet==0) return;
+    for(int iTau=nTau-1; iTau>=0; iTau--){
+        const Tau* tau = taus.at(iTau);
+        for(int iJet=nJet-1; iJet>=0; iJet--){
+            const Jet* jet=jets.at(iJet);
+            // dantrim Apr 21 : previously, by default, we removed the jet over the tau --> do we want to have the option of removing the tau over the jet?
+            if(tau->DeltaR(*jet) < J_T_DR) {
+                jets.erase(jets.begin()+iJet); 
+            } // dR match
+        } // iJet
+    } // iTau
+}
+
+/*
+ if(tau->DeltaR(*jet) < J_T_DR) {
+    if(removeJets) jets.erase(jets.begin()+iJet);
+ else {
+    taus.erase(taus.begin()+iTau_;
+    break;
+  }
+*/
 
 
 

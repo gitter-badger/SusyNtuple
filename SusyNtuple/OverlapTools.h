@@ -19,11 +19,11 @@ namespace Susy {
             to be used. Must be called before 'setSelection' as the 
             selection to be used depends on Run-1 vs. Run-2 procedure.
         */
-        OverlapTools& setHarmonization();
+        OverlapTools& setAnalysis(const AnalysisType& a);
         /// check whether running Run-2 procedure
         /**
             Calling this returns a boolean, m_doHarmonization, which
-            is set true by calling 'setHarmonization'. Call 'doHarmonization'
+            is set true depending on AnalysisType. Call 'doHarmonization'
             when deciding to perform OR on baseline objects (Run-1) or 
             signal objects (Run-2) in the code where the object-selection
             is taking place.
@@ -43,6 +43,15 @@ namespace Susy {
         void e_m_overlap(ElectronVector& electrons, MuonVector& muons);
         /// remove (sub-lead) electron from (lead) electron
         void e_e_overlap(ElectronVector& electrons);
+
+        /// remove (pairs) overlapping muons
+        void m_m_overlap(MuonVector& muons);
+        /// remove taus overlapping with electrons
+        void t_e_overlap(TauVector& taus, ElectronVector& electrons);
+        /// remove taus overlapping with muons
+        void t_m_overlap(TauVector& taus, MuonVector& muons);
+        /// remove jets overlapping with taus
+        void j_t_overlap(TauVector& taus, JetVector& jets);
 
 
 
