@@ -110,14 +110,8 @@ public:
     /** Signal lepton definitions include pileup and near-by lepton corrected isolation cuts */
     bool isSignalLepton(const Susy::Lepton* l, const ElectronVector& baseElectrons, const MuonVector& baseMuons,
                         uint nVtx, bool isMC, bool removeLepsFromIso = false);
-    bool isSignalElectron(const Susy::Electron* ele, const ElectronVector& baseElectrons, const MuonVector& baseMuons,
-                          uint nVtx, bool isMC, bool removeLepsFromIso = false);
-    bool isSignalMuon(const Susy::Muon* mu, const ElectronVector& baseElectrons, const MuonVector& baseMuons,
-                      uint nVtx, bool isMC, bool removeLepsFromIso = false);
     bool isSignalTau(const Susy::Tau* tau, TauID tauJetID = TauID_medium,
                      TauID tauEleID = TauID_loose, TauID tauMuoID = TauID_medium);
-    bool isSemiSignalElectron(const Susy::Electron* ele);
-    bool isSemiSignalMuon(const Susy::Muon* mu);
 
     /// Build Lepton vector - we should probably sort them here
     void buildLeptons(LeptonVector &lep, ElectronVector& ele, MuonVector& muo)
@@ -127,16 +121,6 @@ public:
         for (uint im = 0; im < muo.size(); im++)
             lep.push_back(muo[im]);
     };
-
-    /// Electron, Muon isolation correction for pileup
-    float elPtConeCorr(const Susy::Electron* e, const ElectronVector& baseElectrons, const MuonVector& baseMuons,
-                       uint nVtx, bool isMC, bool removeLeps = false);
-    float elEtTopoConeCorr(const Susy::Electron* e, const ElectronVector& baseElectrons, const MuonVector& baseMuons,
-                           uint nVtx, bool isMC, bool removeLeps = false);
-    float muPtConeCorr(const Susy::Muon* mu, const ElectronVector& baseElectrons, const MuonVector& baseMuons,
-                       uint nVtx, bool isMC, bool removeLeps = false);
-    float muEtConeCorr(const Susy::Muon* mu, const ElectronVector& baseElectrons, const MuonVector& baseMuons,
-                       uint nVtx, bool isMC, bool removeLeps = false);
 
     /// Get the Met, for the appropriate systematic
     Susy::Met* getMet(Susy::SusyNtObject* susyNt, SusyNtSys sys);//, bool useNomPhiForMetSys = true);
