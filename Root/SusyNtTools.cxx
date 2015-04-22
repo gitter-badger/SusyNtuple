@@ -24,11 +24,7 @@ using namespace Susy;
 // Constructor
 /*--------------------------------------------------------------------------------*/
 SusyNtTools::SusyNtTools() :
-m_anaType(Ana_3Lep),
-m_doPtconeCut(true),
-m_doElEtconeCut(true),
-m_doMuEtconeCut(false),
-m_doIPCut(true)
+m_anaType(Ana_3Lep)
 {
 }
 /*--------------------------------------------------------------------------------*/

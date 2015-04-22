@@ -368,13 +368,6 @@ protected:
 
     AnalysisType m_anaType;             ///< Analysis type. currently 2-lep or 3-lep
 
-    // For analyzing different signal lepton cut scenarios, adding some toggles
-    // This might only be temporary
-
-    bool m_doPtconeCut;                 ///< ptcone isolation cuts
-    bool m_doElEtconeCut;               ///< etcone isolation cuts for electrons
-    bool m_doMuEtconeCut;               ///< etcone isolation cuts for muons
-    bool m_doIPCut;                     ///< impact parameter cuts
 };
 
 #endif
