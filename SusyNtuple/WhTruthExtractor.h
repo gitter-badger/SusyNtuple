@@ -36,6 +36,8 @@ class WhTruthExtractor {
    */
   static vint_t ttbarMcAtNloParticles(const vint_t *pdgs,
                                       const vvint_t *childrenIndices);
+
+  static vint_t c1c1_particles(const vint_t *pdgs, const vvint_t *childrenIndices);
   /// indices of the relevant particle for a higgs event (H, its parents, its children)
   /**
      Internally calls @update()

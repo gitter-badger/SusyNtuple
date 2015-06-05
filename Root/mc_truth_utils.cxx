@@ -139,3 +139,41 @@ bool IsDecayingWIndex::operator() (const int & i)
     return isW(i) && !isWintermediate(i) && areAllWChildren(i);
 }
 //----------------------------------
+IsDecayingC1Index::IsDecayingC1Index(const vint_t *pdgs, const vvint_t *childrenIndices) :
+    pdgs_(*pdgs),
+    chIdxs_(*childrenIndices)
+{
+}
+bool IsDecayingC1Index::isC1(const int &i)
+{
+    const int &p=pdgs_[i];
+    return(p==kSPc1 || p==kSAc1);
+}
+bool IsDecayingC1Index::isC1intermediate(const int &iC1)
+{
+    const vint_t &chIdxs = chIdxs_[iC1];
+    for(size_t i=0; i<chIdxs.size(); ++i)
+        if(isC1(chIdxs[i]))
+            return true;
+    return false;
+}
+bool IsDecayingC1Index::isC1Child(const int &i)
+{
+    const int p=abs(pdgs_[i]);
+    return(p==kSPel || p==kSPel || p==kSPve || p==kSPmu || p==kSPvm
+            || p==kSPtau || p==kSPvt);
+}
+bool IsDecayingC1Index::areAllC1Children(const int &iC1)
+{
+    size_t cnt(0);
+    const vint_t &chIdxs = chIdxs_[iC1];
+    for(size_t i=0; i<chIdxs.size(); ++i)
+        if(isC1Child(chIdxs[i]))
+            cnt++;
+    return cnt==chIdxs.size();
+}
+bool IsDecayingC1Index::operator() (const int &i)
+{
+    return isC1(i) && !isC1intermediate(i); // && areAllC1Children(i);
+
+}

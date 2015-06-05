@@ -47,7 +47,14 @@ enum PdgIds{
     kPgam=22,
     kPz=+23,
     kPw=+24, kAw=-24,
-    kPh=+25
+    kPh=+25,
+    kSPc1=+1000024, kSAc1=-1000024,
+    kSPel=+1000011, kSAel=-1000011,
+    kSPve=+1000012, kSAve=-1000012,
+    kSPmu=+1000013, kSAmu=-1000013,
+    kSPvm=+1000014, kSAvm=-1000014,
+    kSPtau=+1000015, kSAtau=-1000015,
+    kSPvt=+1000016, kSAvt=-1000016
 };
 
 //! convert Hdecay to a string
@@ -128,6 +135,18 @@ struct IsDecayingWIndex {
     bool areAllWChildren(const int &iW);
     bool operator() (const int & i);
 }; // end isDecayingW
+
+//! function to find C1s that decay, and avoid intermediate ones
+struct IsDecayingC1Index {
+    const vint_t &pdgs_;
+    const vvint_t &chIdxs_;
+    IsDecayingC1Index(const vint_t *pdgs, const vvint_t *childrenIndices);
+    bool isC1(const int &i);
+    bool isC1intermediate(const int &iC1);
+    bool isC1Child(const int &i);
+    bool areAllC1Children(const int &iC1);
+    bool operator() (const int &i);
+};
 
 
 } // utils

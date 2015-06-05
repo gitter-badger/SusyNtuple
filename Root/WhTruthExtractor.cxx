@@ -170,6 +170,21 @@ WhTruthExtractor::vint_t WhTruthExtractor::ttbarMcAtNloParticles(const vint_t *p
   return particles;
 }
 //----------------------------------
+WhTruthExtractor::vint_t WhTruthExtractor::c1c1_particles(const vint_t *pdgs,
+                                                         const vvint_t *childrenIndices)
+{
+    // identify decaying charginos (c1)
+    vint_t particles;
+    smc::IsDecayingC1Index c1Filter(pdgs, childrenIndices);
+    int nParts(pdgs->size());
+    for(int i=0; i<nParts; ++i){
+        if(c1Filter(i)){
+            particles.push_back(i);
+        }
+    }
+    return particles;
+}
+//----------------------------------
 WhTruthExtractor::vint_t WhTruthExtractor::higgsEventParticleIndices(const vint_t* pdg,
                                                                      const vvint_t *childIndex,
                                                                      const vvint_t *parentIndex)
