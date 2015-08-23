@@ -1,6 +1,7 @@
 #include "SusyNtuple/MuonSelector.h"
 #include "SusyNtuple/ElectronSelector.h"
 #include "SusyNtuple/SusyNt.h"
+#include "SusyNtuple/TriggerTools.h"
 
 #include <algorithm>
 #include <cassert>
@@ -303,6 +304,31 @@ float MuonSelector::errEffSF(const Muon& mu, const SusyNtSys sys)
         err = mu.errEffSF_syst_dn[m_muId];
     }
     return err;
+}
+// -------------------------------------------------------------------------------------------- //
+float MuonSelector::trigSF(const Muon& mu, std::string trig)
+{
+    std::map<std::string, int> trig_map = TriggerTools::getTriggerMap("muSF");
+    float sf = 1.0;
+    if(m_muId == MuonId::Loose) {
+        sf = (mu.muoTrigSF_loose[trig_map[trig]]);
+    }
+    else if(m_muId == MuonId::Medium) {
+        sf = (mu.muoTrigSF_medium[trig_map[trig]]);
+    }
+    return sf;
+}
+// -------------------------------------------------------------------------------------------- //
+float MuonSelector::trigSF(const Muon& mu, int trigNo)
+{
+    float sf = 1.0;
+    if(m_muId == MuonId::Loose) {
+        sf = (mu.muoTrigSF_loose[trigNo]);
+    }
+    else if(m_muId == MuonId::Medium) {
+        sf = (mu.muoTrigSF_medium[trigNo]);
+    }
+    return sf;
 }
 // -------------------------------------------------------------------------------------------- //
 void MuonSelector::check()

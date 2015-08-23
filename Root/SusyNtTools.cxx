@@ -531,3 +531,16 @@ float SusyNtTools::leptonEffSFError(const Lepton& lep, const NtSys::SusyNtSys sy
     }
     return errSF;
 }
+
+
+////////////////////////////
+// Muon Trigger SF
+////////////////////////////
+float SusyNtTools::muonTrigSF(const Muon& mu, std::string trig)
+{
+    return m_muonSelector.trigSF(mu, trig);
+}
+float SusyNtTools::muonTrigSF(const Muon& mu, int trigNo)
+{
+    return m_muonSelector.trigSF(mu, trigNo);
+}

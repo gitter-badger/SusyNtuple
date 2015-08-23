@@ -29,6 +29,9 @@ Muon::Muon(const Muon &rhs):
   loose(rhs.loose),
   medium(rhs.medium),
   tight(rhs.tight),
+  muoEffSF(rhs.muoEffSF),
+  muoTrigSF_loose(rhs.muoTrigSF_loose),
+  muoTrigSF_medium(rhs.muoTrigSF_medium),
   isBadMuon(rhs.isBadMuon),
   isCosmic(rhs.isCosmic),
   ms_up(rhs.ms_up),
@@ -37,7 +40,6 @@ Muon::Muon(const Muon &rhs):
   id_dn(rhs.id_dn),
   scale_up(rhs.scale_up),
   scale_dn(rhs.scale_dn),
-  muoEffSF(rhs.muoEffSF),
   errEffSF_stat_up(rhs.errEffSF_stat_up),
   errEffSF_stat_dn(rhs.errEffSF_stat_dn),
   errEffSF_syst_up(rhs.errEffSF_syst_up),
@@ -68,6 +70,9 @@ Muon& Muon::operator=(const Muon &rhs)
     loose = rhs.loose;
     medium = rhs.medium;
     tight = rhs.tight;
+    muoEffSF = rhs.muoEffSF;
+    muoTrigSF_loose = rhs.muoTrigSF_loose;
+    muoTrigSF_medium = rhs.muoTrigSF_medium;
     isBadMuon = rhs.isBadMuon;
     isCosmic = rhs.isCosmic;
     ms_up = rhs.ms_up;
@@ -76,7 +81,6 @@ Muon& Muon::operator=(const Muon &rhs)
     id_dn = rhs.id_dn;
     scale_up = rhs.scale_up;
     scale_dn = rhs.scale_dn;
-    muoEffSF = rhs.muoEffSF;
     errEffSF_stat_up = rhs.errEffSF_stat_up;
     errEffSF_stat_dn = rhs.errEffSF_stat_dn;
     errEffSF_syst_up = rhs.errEffSF_syst_up;

@@ -7,6 +7,7 @@
 #include "SusyNtuple/AnalysisType.h"
 #include "SusyNtuple/Isolation.h"
 #include "SusyNtuple/MuonId.h"
+#include "SusyNtuple/TriggerTools.h"
 
 
 namespace Susy {
@@ -63,6 +64,17 @@ namespace Susy {
         */
         float errEffSF(const Muon* mu, const NtSys::SusyNtSys sys) { return errEffSF(*mu, sys); }
         float errEffSF(const Muon& mu, const NtSys::SusyNtSys sys);
+        /**
+            Get the trigger SF associated with the WP
+            -> First method: provide the string of the trigger name (e.g. "HLT_mu24_imedium")
+                             that is stored in the "muon_SF_trig" vector in TriggerTools
+            -> Second method: provide the index of the trigger in the "muon_SF_trig" vector in TriggerTools
+        */
+        float trigSF(const Muon* mu, std::string trig) { return trigSF(*mu, trig); }
+        float trigSF(const Muon& mu, std::string trig);
+
+        float trigSF(const Muon* mu, int trigNo) { return trigSF(*mu, trigNo); }
+        float trigSF(const Muon& mu, int trigNo); 
 
         void check();
 

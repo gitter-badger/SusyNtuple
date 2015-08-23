@@ -186,6 +186,13 @@ public:
     float leptonEffSFError(const Lepton* lep, const NtSys::SusyNtSys sys) { return leptonEffSFError(*lep, sys); }
     float leptonEffSFError(const Lepton& lep, const NtSys::SusyNtSys sys);
 
+    /// Method to get the muon trigger SF
+    float muonTrigSF(const Muon* mu, std::string trig) { return muonTrigSF(*mu, trig); }
+    float muonTrigSF(const Muon& mu, std::string trig);
+
+    float muonTrigSF(const Muon* mu, int trigNo) { return muonTrigSF(*mu, trigNo); }
+    float muonTrigSF(const Muon& mu, int trigNo);
+
     //
     // Object printing
     //
